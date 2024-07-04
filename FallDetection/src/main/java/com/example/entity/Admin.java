@@ -68,14 +68,6 @@ public class Admin {
         this.phone = phone;
     }
 
-    public Admin(Integer id, String name, String password, String sex, Integer age, String phone) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.sex = sex;
-        this.age = age;
-        this.phone = phone;
-    }
 }
 
 

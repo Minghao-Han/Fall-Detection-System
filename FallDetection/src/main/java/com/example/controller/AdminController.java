@@ -3,18 +3,22 @@ package com.example.controller;
 import com.example.common.Result;
 import com.example.entity.Admin;
 import com.example.service.AdminService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-
 @RestController
-@RequestMapping("/user")
+@CrossOrigin
+@RequestMapping("/admin")
 public class AdminController {
     @Resource
     private AdminService adminService;
+
+    @PostMapping("/login")
+    public Result login(@RequestBody Admin admin) {
+        Admin loginUser = adminService.login(admin);
+        return Result.success(loginUser);
+    }
     /**
      * controller里的一个方法，它其实就是我们平常说的web项目的一个接口的入口
      * 可以在这个方法上再加上一个url
