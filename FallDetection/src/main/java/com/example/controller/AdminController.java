@@ -19,6 +19,12 @@ public class AdminController {
         Admin loginUser = adminService.login(admin);
         return Result.success(loginUser);
     }
+
+    @PostMapping("/register")
+    public Result register(@RequestBody Admin admin) {
+        adminService.add(admin);
+        return Result.success();
+    }
     /**
      * controller里的一个方法，它其实就是我们平常说的web项目的一个接口的入口
      * 可以在这个方法上再加上一个url
