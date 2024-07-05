@@ -14,3 +14,7 @@ mybatis:
 
 server:
   port: 8080
+
+video:
+  upload:
+    directory: fallClips/
