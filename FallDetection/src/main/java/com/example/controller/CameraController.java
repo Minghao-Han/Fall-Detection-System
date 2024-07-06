@@ -1,9 +1,12 @@
 package com.example.controller;
 
+import com.example.service.CameraService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.example.common.Result;
 import com.example.entity.Camera;
 import com.example.entity.Params;
-import com.example.service.CameraService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,4 +46,18 @@ public class CameraController {
         cameraService.unbindPhone(id);
         return Result.success();
     }
+
+    @Autowired
+    public CameraController(CameraService cameraService) {
+        this.cameraService = cameraService;
+    }
+
+    @GetMapping("/startCamera")
+    public void startCamera() {
+        cameraService.startCamera();
+    }
+
 }
+
+
+
