@@ -25,19 +25,10 @@ public class AdminController {
         adminService.add(admin);
         return Result.success();
     }
-    /**
-     * controller里的一个方法，它其实就是我们平常说的web项目的一个接口的入口
-     * 可以在这个方法上再加上一个url
-     * 也可以指定请求方式：GET POST PUT DELETE
-     * @return
-     */
-    @GetMapping("/start")
-    public Result Start(){
-        return Result.success("能成功吗");
-    }
-    @GetMapping("/getUser")
-    public Result getUser(){
-       List<Admin> list=adminService.getUser();
-       return  Result.success(list);
+
+    @GetMapping()
+    public Result findAll(){
+       List<Admin> list=adminService.findAll();
+       return Result.success(list);
     }
 }
