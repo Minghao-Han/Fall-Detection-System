@@ -82,6 +82,15 @@ int thread_pool_destroy(thread_pool_t *pool){
 
 
 int thread_pool_add_task(thread_pool_t *pool, void (*func)(void *arg), void *arg){
+    // check if there are too many tasks waiting
+    int current_task_num;
+    sem_getvalue(&(pool->task_num), &current_task_num);
+    if (current_task_num > pool->max_task_num)
+    {
+        return 1;
+    }
+    
+
     task_t *new_task = (task_t *)malloc(sizeof(task_t));
     if (new_task == NULL)
     {

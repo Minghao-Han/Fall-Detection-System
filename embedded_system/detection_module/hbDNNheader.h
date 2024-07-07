@@ -1,8 +1,53 @@
-
+#include <stdint.h>
 #ifndef _HBDNNHEADER_H
 #define _HBDNNHEADER_H 1
-#include <stdint.h>
 #define HB_DNN_TENSOR_MAX_DIMENSIONS 8
+
+#define HB_DNN_INITIALIZE_INFER_CTRL_PARAM(param) \
+{                                                 \
+    (param)->bpuCoreId = HB_BPU_CORE_ANY;         \
+    (param)->dspCoreId = HB_DSP_CORE_ANY;         \
+    (param)->priority = HB_DNN_PRIORITY_LOWEST;   \
+    (param)->more = false;                        \
+    (param)->customId = 0;                        \
+    (param)->reserved1 = 0;                       \
+    (param)->reserved2 = 0;                       \
+}
+// int32_t hbDNNRegisterLayerCreator(const char *layerType,
+//                                   hbDNNLayerCreator layerCreator);
+// int32_t hbDNNUnregisterLayerCreator(const char *layerType);
+// 错误码
+#define HB_DNN_SUCCESS = 0                              // 执行成功
+#define HB_DNN_INVALID_ARGUMENT = -6000001              // 非法参数
+#define HB_DNN_INVALID_MODEL = -6000002                 // 非法模型
+#define HB_DNN_MODEL_NUMBER_EXCEED_LIMIT = -6000003     // 模型个数超过限制
+#define HB_DNN_INVALID_PACKED_DNN_HANDLE = -6000004     // 非法packed handle
+#define HB_DNN_INVALID_DNN_HANDLE = -6000005            // 非法handle
+#define HB_DNN_CAN_NOT_OPEN_FILE = -6000006             // 文件不存在
+#define HB_DNN_OUT_OF_MEMORY = -6000007                 // 没有足够的内存
+#define HB_DNN_TIMEOUT = -6000008                       // 超时
+#define HB_DNN_TASK_NUM_EXCEED_LIMIT = -6000009         // 任务数量超限制
+#define HB_DNN_TASK_BATCH_SIZE_EXCEED_LIMIT = -6000010  // 多任务处理数量超限制
+#define HB_DNN_INVALID_TASK_HANDLE = -6000011           // 非法task handle
+#define HB_DNN_RUN_TASK_FAILED = -6000012               // 任务执行失败
+#define HB_DNN_MODEL_IS_RUNNING = -6000013              // 任务执行中
+#define HB_DNN_INCOMPATIBLE_MODEL = -6000014            // 不兼容的模型
+#define HB_DNN_API_USE_ERROR = -6000015                 // 接口使用错误
+
+#define HB_SYS_SUCCESS = 0                              // 执行成功
+#define HB_SYS_INVALID_ARGUMENT = -6000129              // 非法参数
+#define HB_SYS_OUT_OF_MEMORY = -6000130                 // 没有足够的内存
+#define HB_SYS_REGISTER_MEM_FAILED = -6000131           // 注册内存失败
+// 常用环境变量
+#define HB_DNN_LOG_LEVEL                // 设置日志等级。
+#define HB_DNN_CONV_MAP_PATH            // 模型卷积层配置文件路径；编译参数layer_out_dump为true时产生的json文件。
+#define HB_DNN_DUMP_PATH                // 模型卷积层结果输出路径，与HB_DNN_CONV_MAP_PATH配合使用。
+#define HB_DNN_PLUGIN_PATH              // 自定义CPU算子动态链接库所在目录。
+#define HB_DNN_PROFILER_LOG_PATH        // 模型运行各阶段耗时统计信息dump路径。
+#define HB_DNN_SIM_PLATFORM             // x86模拟器模拟平台设置，可设置为BERNOULLI、BERNOULLI2、BAYES。
+#define HB_DNN_SIM_BPU_MEM_SIZE         // x86模拟器设置BPU内存大小，单位MB。
+
+
 typedef void *hbPackedDNNHandle_t;
 typedef void *hbDNNHandle_t;
 typedef void *hbDNNTaskHandle_t;
@@ -108,5 +153,68 @@ typedef enum {
   HB_SYS_MEM_CACHE_INVALIDATE = 1,
   HB_SYS_MEM_CACHE_CLEAN = 2
 } hbSysMemFlushFlag;
+typedef enum {
+  HB_DNN_RESIZE_TYPE_BILINEAR = 0,
+} hbDNNResizeType;
+typedef struct {
+  int32_t bpuCoreId;
+  int32_t priority;
+  hbDNNResizeType resizeType;
+  int32_t reserved1;
+  int32_t reserved2;
+  int32_t reserved3;
+  int32_t reserved4;
+} hbDNNResizeCtrlParam;
+// typedef hobot::dnn::Layer *(*hbDNNLayerCreator)();
+const char *hbDNNGetVersion();
+int32_t hbDNNInitializeFromFiles(hbPackedDNNHandle_t *packedDNNHandle,const char **modelFileNames,int32_t modelFileCount);
+int32_t hbDNNInitializeFromDDR(hbPackedDNNHandle_t *packedDNNHandle,const void **modelData,int32_t *modelDataLengths,int32_t modelDataCount);
+int32_t hbDNNRelease(hbPackedDNNHandle_t packedDNNHandle);
+int32_t hbDNNGetModelNameList(const char ***modelNameList,int32_t *modelNameCount,hbPackedDNNHandle_t packedDNNHandle);
+int32_t hbDNNGetModelHandle(hbDNNHandle_t *dnnHandle,hbPackedDNNHandle_t packedDNNHandle,const char *modelName);
+int32_t hbDNNGetInputCount(int32_t *inputCount,hbDNNHandle_t dnnHandle);
+int32_t hbDNNGetInputName(const char **name,hbDNNHandle_t dnnHandle,int32_t inputIndex);
+int32_t hbDNNGetInputTensorProperties(hbDNNTensorProperties *properties,
+                                      hbDNNHandle_t dnnHandle,
+                                      int32_t inputIndex);
+int32_t hbDNNGetOutputCount(int32_t *outputCount,
+                            hbDNNHandle_t dnnHandle);
+int32_t hbDNNGetOutputName(const char **name,
+                           hbDNNHandle_t dnnHandle,
+                           int32_t outputIndex);
+int32_t hbDNNGetOutputTensorProperties(hbDNNTensorProperties *properties,
+                                       hbDNNHandle_t dnnHandle,
+                                       int32_t outputIndex);
+int32_t hbDNNInfer(hbDNNTaskHandle_t *taskHandle,
+                   hbDNNTensor **output,
+                   const hbDNNTensor *input,
+                   hbDNNHandle_t dnnHandle,
+                   hbDNNInferCtrlParam *inferCtrlParam);
+int32_t hbDNNRoiInfer(hbDNNTaskHandle_t *taskHandle,
+                      hbDNNTensor **output,
+                      const hbDNNTensor *input,
+                      hbDNNRoi *rois,
+                      int32_t roiCount,
+                      hbDNNHandle_t dnnHandle,
+                      hbDNNInferCtrlParam *inferCtrlParam);
+int32_t hbDNNWaitTaskDone(hbDNNTaskHandle_t taskHandle,
+                          int32_t timeout);
+int32_t hbDNNReleaseTask(hbDNNTaskHandle_t taskHandle);
+int32_t hbDNNSetTaskDoneCb(hbDNNTaskHandle_t taskHandle, hbDNNTaskDoneCb cb,
+                           void *userdata);
+
+int32_t hbSysAllocMem(hbSysMem *mem, uint32_t size);
+int32_t hbSysAllocCachedMem(hbSysMem *mem, uint32_t size);
+int32_t hbSysFlushMem(hbSysMem *mem, int32_t flag);
+int32_t hbSysFreeMem(hbSysMem *mem);
+int32_t hbSysWriteMem(hbSysMem *dest, char *src, uint32_t size);
+int32_t hbSysReadMem(char *dest, hbSysMem *src, uint32_t size);
+int32_t hbSysRegisterMem(hbSysMem *mem);
+int32_t hbSysUnregisterMem(hbSysMem *mem);
+int32_t hbDNNResize(hbDNNTaskHandle_t *taskHandle,
+                    hbDNNTensor *output,
+                    const hbDNNTensor *input,
+                    const hbDNNRoi *roi,
+                    hbDNNResizeCtrlParam *resizeCtrlParam);
 
 #endif // _HBDNNHEADER_H

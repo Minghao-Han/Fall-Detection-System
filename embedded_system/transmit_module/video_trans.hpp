@@ -1,6 +1,7 @@
 // trans -> transmission
 #include <stddef.h>
 #include <netinet/in.h>
+#include <stdbool.h>
 #ifndef _VIDEO_TRANS_HPP
 #define _VIDEO_TRANS_HPP 1
 
@@ -8,11 +9,27 @@
 extern "C"{
 #endif
 
-typedef struct stream_t{}stream_t;
-int stream_init(stream_t *stream,struct sockaddr_in *server_info, void *camera_buf, size_t len);
-int stream_start(stream_t *stream_ptr);
+typedef struct stream_t{
+    struct sockaddr_in *server_info;
+    void *camera_buf;
+    size_t len;
+}stream_t;
+stream_t *stream_init(struct sockaddr_in *server_info, void *camera_buf, size_t len);
+
+/** 
+ * @brief Start the stream module
+ * @param stream_ptr: stream_t *
+ * @return NULL
+*/
+void stream_start(void *args);
 int stream_destroy(stream_t *stream_ptr);
-bool uploadFile(const char* filePath);
+
+/** 
+ * @brief Upload a file to the server
+ * @param file_index: int file index in clip folder, you need to concatenate the file index with the folder path to get the full file path
+ * @return bool
+*/
+void *upload_file(void *args);
 
 
 #ifdef __cplusplus
