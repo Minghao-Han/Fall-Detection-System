@@ -8,10 +8,10 @@
             <div style="margin-top: 25px; text-align: center; height: 320px;">
               <el-form :model="admin">
                 <el-form-item>
-                  <el-input v-model="admin.name" prefix-icon="el-icon-user" style="width: 80%" placeholder="请输入用户名"></el-input>
+                  <el-input v-model="admin.phone" prefix-icon="el-icon-user" style="width: 80%" placeholder="请输入手机号" ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-input v-model="admin.password" prefix-icon="el-icon-lock" style="width: 80%" placeholder="请输入密码"></el-input>
+                  <el-input v-model="admin.password" prefix-icon="el-icon-lock" style="width: 80%" placeholder="请输入密码" show-password></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button style="width: 80%; margin-top: 10px" type="primary" @click="login()">登录</el-button>
