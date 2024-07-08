@@ -12,10 +12,10 @@ import java.util.List;
 public interface AdminDao extends Mapper<Admin> {
     //基于注解的方式
     //@Select("select * from admin")
-    List<Admin> getUser();
+    List<Admin> findAll();
 
-    @Select("select * from admin where name = #{name} and password = #{password} limit 1")
-    Admin findByNameAndPassword(@Param("name") String name, @Param("password") String password);
+    @Select("select * from admin where phone = #{phone} and password = #{password} limit 1")
+    Admin findByPhoneAndPassword(@Param("phone") String phone, @Param("password") String password);
 
     @Select("select * from admin where name = #{name} limit 1")
     Admin findByName(@Param("name") String name);
