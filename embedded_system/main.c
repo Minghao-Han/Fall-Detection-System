@@ -59,7 +59,7 @@ int main(){
 
     pthread_t threads[5];
     // camera init and start
-    camera_t *camera = camera_init();
+    camera_t *camera = camera_init(width,height,channel_num);
     camera_buf=camera->camera_buf;
     pthread_create(&threads[CAMERA_THREAD], NULL, &camera_start, (void *)camera);
     // video stream transmission init and start

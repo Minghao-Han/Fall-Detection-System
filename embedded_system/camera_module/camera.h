@@ -4,10 +4,11 @@
 
 typedef struct camera_t{
     frame_t *camera_buf;
+    size_t frame_size;
     void *vio_object;
 }camera_t;
 
-camera_t *camera_init();
+camera_t *camera_init(size_t width, size_t height,int channel_num);
 
 /** 
  * @brief Start the camera module

@@ -11,7 +11,11 @@ extern "C"{
 #endif
 
 void inference_init(hbDNNInferCtrlParam *infer_ctrl_param,char *model_path);
-void infer(frame_t *frame);
+/**
+ * @brief inference the frame
+ * @param frame frame_t * :the frame to be inferred
+ */
+void *infer(void *args);
 void inference_destroy();
 
 #ifdef __cplusplus
