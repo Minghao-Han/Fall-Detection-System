@@ -10,6 +10,9 @@
             <if test="params != null and params.cameraName != null and params.cameraName != ''">
                 and cameraName like concat('%', #{ params.cameraName }, '%')
             </if>
+            <if test="params != null and params.phone != null and params.phone != ''">
+                and phone = #{params.phone}
+            </if>
         </where>
     </select>
 

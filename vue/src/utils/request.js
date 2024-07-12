@@ -2,16 +2,20 @@ import axios from 'axios'
 
 // 创建一个axios对象出来
 const request = axios.create({
-    baseURL: 'http://localhost:8080/',
+    baseURL: 'http://localhost:8080/api',
     timeout: 5000
 })
+
 
 // request 拦截器
 // 可以自请求发送前对请求做一些处理
 // 比如统一加token，对请求参数统一加密
 request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
-
+    const user = localStorage.getItem("user");
+    if (user) {
+        config.headers['token'] = JSON.parse(user).token;
+    }
     // config.headers['token'] = user.token;  // 设置请求头
     return config
 }, error => {
