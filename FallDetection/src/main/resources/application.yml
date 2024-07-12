@@ -29,3 +29,6 @@ pagehelper:
 
 
 
+video:
+  upload:
+    directory: fallClips/
