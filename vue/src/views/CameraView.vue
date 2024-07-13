@@ -4,18 +4,18 @@
       <el-input v-model="params.cameraName" style="width: 300px; margin-right: 10px" placeholder="请输入位置" clearable prefix-icon="el-icon-search"></el-input>
       <el-input v-model="params.name" style="width: 300px; margin-right: 10px" placeholder="请输入老人姓名" clearable prefix-icon="el-icon-search"></el-input>
       <el-button type="warning" @click="findBySearch()">查询</el-button>
-      <el-button type="primary">绑定</el-button>
+      <el-button type="primary" @click="binding()">绑定</el-button>
     </div>
     <div>
       <el-table :data="tableData" stripe style="width: 100%">
 <!--这里的prop的名字应该与entity中设定的变量名相同        -->
         <el-table-column prop="dateTime" label="日期"></el-table-column>
-        <el-table-column prop="cameraName" label="位置" ></el-table-column>
+        <el-table-column prop="cameraName" label="位置"></el-table-column>
         <el-table-column prop="name" label="老人姓名"></el-table-column>
         <el-table-column label="操作" >
           <template slot-scope="scope">
             <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-popconfirm title="确定删除吗？" @confirm="unbind(scope.row.id)">
+            <el-popconfirm title="确定删除吗？" @confirm="unbind(scope.row.serialNumber)">
               <el-button slot="reference" type="danger" style="margin-left: 5px">删除</el-button>
             </el-popconfirm>
           </template>
@@ -34,12 +34,12 @@
       </el-pagination>
     </div>
     <div>
-      <el-dialog title="请修改信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-dialog title="请修改信息" :visible.sync="dialogFormVisible" width="40%">
         <el-form :model="form">
-          <el-form-item label="位置" label-width="15%">
+          <el-form-item label="位置" prop="cameraName" label-width="15%">
             <el-input v-model="form.cameraName" autocomplete="off" style="width:90%"></el-input>
           </el-form-item>
-          <el-form-item label="老人姓名" label-width="15%">
+          <el-form-item label="老人姓名" prop="name"label-width="15%">
             <el-input v-model="form.name" autocomplete="off" style="width:90%"></el-input>
           </el-form-item>
         </el-form>
@@ -58,20 +58,23 @@ import request from "@/utils/request";
 export default {
   data() {
     return {
+      user: localStorage.getItem("user")?JSON.parse(localStorage.getItem("user")):{},
       params:{
         cameraName:'',
         name:'',
         pageNum:1,
-        pageSize:5
+        pageSize:5,
+        phone:'',
       },
       tableData: [],
       total:0,
       dialogFormVisible:false,
-      form:{}
+      form:{},
     }
   },
   //页面加载的时候做的事情，在created里面
   created() {
+    this.params.phone=this.user.phone;
     this.findBySearch();
   },
   //定义一些界面上控件出发的事件并调用方法
@@ -97,7 +100,7 @@ export default {
       this.findBySearch();
     },
     submit() {
-      request.post("/camera").then(res => {
+      request.post("/camera",this.form).then(res => {
         if (res.code === '0') {
           this.$message({
             message: '操作成功',
@@ -108,17 +111,17 @@ export default {
         } else {
           this.$message({
             message: res.msg,
-            type: 'success'
+            type: 'error'
           });
         }
       })
     },
     edit(obj){
-      this.form=obj;
+      this.form = JSON.parse(JSON.stringify(obj));
       this.dialogFormVisible=true;
     },
-    unbind(id){
-      request.patch("/camera/"+id).then(res => {
+    unbind(serialNumber){
+      request.patch("/camera/"+serialNumber).then(res => {
         if (res.code === '0') {
           this.$message({
             message: '解绑成功',
@@ -128,7 +131,7 @@ export default {
         } else {
           this.$message({
             message: res.msg,
-            type: 'success'
+            type: 'error'
           });
         }
       })

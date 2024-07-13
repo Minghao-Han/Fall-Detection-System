@@ -3,21 +3,21 @@ package com.example.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Table(name = "camera")
 public class Camera {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name="serialNumber")
+    private String serialNumber;
+    /*    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;*/
 
     @Column(name = "cameraName")
     private String cameraName;
 
-    @Column(name = "serialNumber")
-    private String serialNumber;
+/*    @Column(name = "serialNumber")
+    private String serialNumber;*/
 
     @Column(name = "phone")
     private String phone;
@@ -25,18 +25,21 @@ public class Camera {
     @Column(name = "name")
     private String name;
 
+/*    @Column(name="id")
+    private Integer id;*/
+
     @Column(name = "dateTime")
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date dateTime;
 
-    public Integer getId() {
+/*    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
+    }*/
 
     public String getCameraName() {
         return cameraName;

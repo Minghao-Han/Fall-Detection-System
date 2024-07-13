@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.exception.CustomException;
 import com.example.service.CameraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,17 +34,20 @@ public class CameraController {
         return Result.success(info);
     }
 
+    //编辑摄像头信息
     @PostMapping
     public Result save(@RequestBody Camera camera) {
-        if (camera.getId() != null) {
+        if (camera.getSerialNumber() != null) {
             cameraService.update(camera);
+        }else{
+           throw new CustomException("序列号为空");
         }
         return Result.success();
     }
 
-    @PatchMapping("/{id}")
-    public Result unbindPhone(@PathVariable Integer id){
-        cameraService.unbindPhone(id);
+    @PatchMapping("/{serialNumber}")
+    public Result unbindPhone(@PathVariable String serialNumber){
+        cameraService.unbindPhone(serialNumber);
         return Result.success();
     }
 
