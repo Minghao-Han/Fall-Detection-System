@@ -97,7 +97,7 @@ export default {
       this.findBySearch();
     },
     submit() {
-      request.post("/camera").then(res => {
+      request.post("/camera",this.form).then(res => {
         if (res.code === '0') {
           this.$message({
             message: '操作成功',
