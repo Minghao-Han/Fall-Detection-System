@@ -4,12 +4,16 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root   #你本地的数据库用户名
-    password: 203614 #你本地的数据库密码
+    password: 123456 #你本地的数据库密码
     url: jdbc:mysql://localhost:3306/springboot?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
   main:
     allow-circular-references: true
   jpa:
     open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
 
 #MyBatis映射
 mybatis:
@@ -32,3 +36,5 @@ pagehelper:
 video:
   upload:
     directory: fallClips/
+
+
