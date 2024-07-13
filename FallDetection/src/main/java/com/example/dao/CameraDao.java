@@ -14,7 +14,7 @@ public interface CameraDao extends Mapper<Camera> {
 
     List<Camera> findBySearch(@Param("params") Params params);
 
-    @Update("UPDATE camera SET phone = NULL WHERE id = #{id}")
-    int unbindPhone(@Param("id") Integer id);
+    @Update("UPDATE camera SET phone = NULL,name = NULL WHERE serialNumber = #{serialNumber}")
+    void unbindPhone(@Param("serialNumber") String serialNumber);
 
 }

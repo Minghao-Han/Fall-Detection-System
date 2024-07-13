@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.common.JwtTokenUtils;
 import com.example.dao.AdminDao;
 import com.example.entity.Admin;
 import com.example.exception.CustomException;
@@ -33,6 +34,9 @@ public class AdminService {
             throw new CustomException("手机号或密码输入错误");
         }
         // 如果查出来了有，那说明确实有这个管理员，而且输入的用户名和密码都对；
+        // 生成jwt token给前端
+        String token = JwtTokenUtils.genToken(user.getPhone(), user.getPassword());
+        user.setToken(token);
         return user;
     }
 
@@ -41,11 +45,17 @@ public class AdminService {
         if (admin.getName() == null || "".equals(admin.getName())) {
             throw new CustomException("用户名不能为空");
         }
+        if(admin.getPhone().length()!=11){
+            throw new CustomException("手机号长度不正确");
+        }
+        if(admin.getPassword()==null||"".equals(admin.getPassword())){
+            throw new CustomException("密码不能为空");
+        }
         // 2. 进行重复性判断，同一名字的管理员不允许重复新增：只要根据用户名去数据库查询一下就可以了
-        Admin user = adminDao.findByName(admin.getName());
+        Admin user = adminDao.findByPhone(admin.getPhone());
         if (user != null) {
             // 说明已经有了，这里我们就要提示前台不允许新增了
-            throw new CustomException("该用户名已存在，请更换用户名");
+            throw new CustomException("该手机号已存在，请更换手机号");
         }
         // 初始化一个密码
         if (admin.getPassword() == null) {
@@ -54,7 +64,13 @@ public class AdminService {
         adminDao.insertSelective(admin);
     }
 
-    public void update(Admin admin) {
-        adminDao.updateByPrimaryKeySelective(admin);
+
+    public Admin findByPhone(String adminPhone) {
+        return adminDao.selectByPrimaryKey(adminPhone);
     }
+
+
+    /*public void update(Admin admin) {
+        adminDao.updateByPrimaryKeySelective(admin);
+    }*/
 }

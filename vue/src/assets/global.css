@@ -7,4 +7,6 @@ body {
 * {
     /*外边距不会额外占用1px的像素*/
     box-sizing: border-box;
+    padding: 0;
+    margin: 0;
 }
