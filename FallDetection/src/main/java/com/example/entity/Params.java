@@ -10,6 +10,9 @@ public class Params {
 
     private Integer pageSize;
 
+
+    private String phone;
+
     public String getCameraName() {
         return cameraName;
     }
@@ -40,5 +43,13 @@ public class Params {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

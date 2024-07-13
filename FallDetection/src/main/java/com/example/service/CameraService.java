@@ -39,10 +39,8 @@ public class CameraService {
         cameraDao.updateByPrimaryKeySelective(camera);
     }
 
-
-
-    public void unbindPhone(Integer id) {
-        cameraDao.unbindPhone(id);
+    public void unbindPhone(String serialNumber) {
+        cameraDao.unbindPhone(serialNumber);
     }
 
     private final SimpMessagingTemplate messagingTemplate;

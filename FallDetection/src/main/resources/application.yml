@@ -4,19 +4,23 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root   #你本地的数据库用户名
-    password: 123456 #你本地的数据库密码
+    password: 203614 #你本地的数据库密码
     url: jdbc:mysql://localhost:3306/springboot?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
   main:
     allow-circular-references: true
+  jpa:
+    open-in-view: false
 
-# 配置mybatis实体和xml映射
+#MyBatis映射
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.example.entity
 
+#服务器端口
 server:
   port: 8080
 
+#分页配置
 pagehelper:
   helper-dialect: mysql
   reasonable: true
