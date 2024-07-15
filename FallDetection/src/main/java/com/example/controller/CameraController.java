@@ -38,10 +38,28 @@ public class CameraController {
     //编辑摄像头信息
     @PostMapping
     public Result save(@RequestBody Camera camera) {
-        if (camera.getSerialNumber() != null) {
+        if (camera.getCameraName()!=null && camera.getName()!=null ) {
             cameraService.update(camera);
         }else{
-           throw new CustomException("序列号为空");
+           throw new CustomException("存在空字段");
+        }
+        return Result.success();
+    }
+
+    @PostMapping("/bind")
+    public Result bind(@RequestBody Camera camera){
+        if (camera.getSerialNumber() != null && camera.getCameraName()!=null && camera.getName()!=null ) {
+/*            Params params=new Params();
+            params.setSerialNumber(camera.getSerialNumber());
+            params.setCameraName(camera.getCameraName());
+            params.setName(camera.getName());
+            params.setPhone(camera.getPhone());*/
+            int rows = cameraService.bind(camera);
+            if (rows !=1){
+                return Result.error("该序列号已经被绑定");
+            }
+        }else{
+            throw new CustomException("存在空字段");
         }
         return Result.success();
     }

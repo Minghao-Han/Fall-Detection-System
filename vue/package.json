@@ -7,11 +7,14 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "async-validator": "^4.2.5",
     "axios": "^1.7.2",
     "core-js": "^3.8.3",
     "element-ui": "^2.15.14",
+    "video.js": "^8.16.1",
     "vue": "^2.6.14",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.1",
+    "vue-video-player": "^5.0.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
