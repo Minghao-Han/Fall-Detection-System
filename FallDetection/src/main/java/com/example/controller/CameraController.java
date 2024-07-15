@@ -15,8 +15,9 @@ import javax.annotation.Resource;
 import java.io.Console;
 import java.util.List;
 
-@CrossOrigin
+
 @RestController
+@CrossOrigin
 @RequestMapping("/camera")
 public class CameraController {
     @Resource
