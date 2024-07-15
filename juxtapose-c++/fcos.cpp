@@ -64,7 +64,7 @@ vector<DetectBox> FCOSDetector::operator()(const cv::Mat &input_mat)
         hbSysAllocCachedMem(&mem, output_tensors[i].properties.alignedByteSize);
     }
     inference(input_tensor, output_tensors);
-    xt::xarray<float> pred_bboxes=(output_tensors, input_mat.size(), input_mat.size(), 0.5, 0.6);
+    xt::xarray<float> pred_bboxes=postprocess(output_tensors, input_mat.size(), input_mat.size(), 0.5, 0.6);
     for (std::size_t i = 0; i < pred_bboxes.shape()[0]; ++i) {
         DetectBox detect_box;
         detect_box.top = pred_bboxes(i, 1);

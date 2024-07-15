@@ -41,7 +41,6 @@ private:
     Size model_input_size;
 
     void inference(hbDNNTensor &input_tensor, hbDNNTensor *output_tensors);
-    tuple<Mat, Point2f, Point2f> preprocess(const Mat& img, const Rect& bbox);
     tuple<vector<vector<Point2f>>, vector<vector<float>>> postprocess(
         const vector<Mat>& outputs,
         const Point2f& center,
@@ -51,11 +50,11 @@ private:
     cv::Mat bgr2nv12_opencv(const cv::Mat& bgr);
     cv::Mat preprocess(const cv::Mat &img, hbDNNTensor &input_tensor);
     std::vector<xt::xarray<float>> decode(hbDNNTensor *output_tensors, float score_threshold, const cv::Size &origin_shape, int input_size);
-    std::vector<xt::xarray<float>> postprocess(hbDNNTensor* model_output,
+    std::vector<xt::xarray<float>> FCOSDetector::postprocess(hbDNNTensor* model_output,
                                            const cv::Size& model_hw_shape,
                                            const cv::Size& origin_img_shape,
-                                           float score_threshold = 0.5,
-                                           float nms_threshold = 0.6);
+                                           float score_threshold,
+                                           float nms_threshold)
 };
 
 

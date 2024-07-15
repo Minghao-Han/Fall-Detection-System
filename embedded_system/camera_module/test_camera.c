@@ -7,10 +7,6 @@
 #include <stdbool.h>
 
 #define CAMERA_THREAD 0
-#define FALL_DETECTION_THREAD 1
-#define VIDEO_STREAM 2
-#define ALERT_THREAD 3 
-#define SEND_CLIP_THREAD 4
 
 #define DEFAULT_CONF_PATH "./conf.txt"
 
@@ -31,7 +27,7 @@ int main(){
     const int channel_num=3;
 
 
-    pthread_t threads[5];
+    pthread_t threads[1];
     // camera init and start
     camera_t *camera = camera_init(width,height,channel_num);
     camera_buf=camera->camera_buf;
