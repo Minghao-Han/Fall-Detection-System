@@ -2,7 +2,7 @@
 #define _CONF_H 1
 
 typedef struct conf_t {
-    char *server_ip;
+    char server_ip[15];
     int server_port; 
     char *clip_folder;
 } conf_t;

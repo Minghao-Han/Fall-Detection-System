@@ -278,7 +278,7 @@ bool BoxCompare(
 
 
 
-cv::Mat GetAffineTransform(float center_x, float center_y, float scale_width, float scale_height, int output_image_width, int output_image_height, bool inverse = false)
+cv::Mat GetAffineTransform(float center_x, float center_y, float scale_width, float scale_height, int output_image_width, int output_image_height, bool inverse)
 {
 	// solve the affine transformation matrix
 	/* 求解仿射变换矩阵 */

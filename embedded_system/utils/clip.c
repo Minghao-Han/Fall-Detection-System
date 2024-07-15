@@ -6,10 +6,9 @@
 #include <string.h>
 #include <string.h>
 
-#define DEFAULT_CLIP_SAVER_META_INFO_PATH "/meta_info.txt"
+#define DEFAULT_CLIP_SAVER_META_INFO_PATH "/home/sunrisemeta_info.txt"
 
 int clip_saver_init(clip_saver_t *clip_saver, int capacity, char *folder_path,frame_buf_t *clip){
-    clip_saver_t *clip_saver = (clip_saver_t *)malloc(sizeof(clip_saver_t));
     if (clip_saver == NULL)
     {
         return 1;
@@ -24,7 +23,8 @@ int clip_saver_init(clip_saver_t *clip_saver, int capacity, char *folder_path,fr
 
 int save_clip(clip_saver_t *clip_saver){
     char filename[6]; // 保存文件名的字符串     /{index}.mp4   
-    char new_file_name[64] = clip_saver->folder_path; // 注意，该字符串的大小可能是导致缓冲区溢出/segment fault的原因，但是这样是为了减少内存使用。
+    char new_file_name[64] = {0}; // Initialize the array with a brace-enclosed initializer
+    strcat(new_file_name, clip_saver->folder_path);
     
     if (clip_saver->clip_num > clip_saver->capacity)
     {

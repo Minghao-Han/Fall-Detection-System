@@ -19,7 +19,7 @@ int read_conf(conf_t *conf, const char *conf_path) {
     char line[256];
     while (fgets(line, sizeof(line), file)) {
         // 解析 server_ip
-        if (strncmp(line, "server_ip:", 10) == 0) {
+        if (strncmp(line, "server_ip:", 15) == 0) {
             strcpy(conf->server_ip, line + 11);
             // 去掉结尾的换行符
             conf->server_ip[strcspn(conf->server_ip, "\n")] = 0;
