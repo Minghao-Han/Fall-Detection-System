@@ -31,4 +31,4 @@ pagehelper:
 
 video:
   upload:
-    directory: fallClips/
+    directory: src/main/resources/static/videos

@@ -67,6 +67,10 @@ public class CameraService {
             }
         }
     }
+
+    public int bind(Camera camera) {
+        return cameraDao.bind(camera);
+    }
 }
 
 

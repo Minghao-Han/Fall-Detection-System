@@ -5,7 +5,7 @@ const request = axios.create({
     baseURL: 'http://localhost:8080/api',
     timeout: 5000
 })
-
+/*axios.defaults.withCredentials = true;*/
 
 // request 拦截器
 // 可以自请求发送前对请求做一些处理

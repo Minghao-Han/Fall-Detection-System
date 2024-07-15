@@ -1,6 +1,8 @@
 package com.example.controller;
+import com.example.common.Message;
+import com.example.common.Result;
+import com.example.service.FallVideoService;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.*;
@@ -10,8 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/video")
 public class VideoController {
+
+    @javax.annotation.Resource
+    private FallVideoService fallVideoService;
+
     @Value("${video.upload.directory}")
     private String uploadDir;
     // 用于接收上传的视频流，并进行处理
@@ -25,6 +32,9 @@ public class VideoController {
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadFile));
                 stream.write(bytes);
                 stream.close();
+                /*fallVideoService.addData(serialNumber,uploadFile.getName())*/;//里面应该有相关参数，只包括序列号似乎即可
+                //短信发送接口的调用
+                /*Message.sendMessage((int)(Math.random()*1000000)+"", "13657408690");*/
                 return new ResponseEntity<>("Video uploaded successfully", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Video upload failed: File is empty", HttpStatus.BAD_REQUEST);
@@ -47,6 +57,12 @@ public class VideoController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PatchMapping("/{serialNumber}")
+    public Result choose(@PathVariable String serialNumber){
+        //这里需要填写切换播放器的相关代码，如果有播放源，就播放视频，没有播放源就放一张无播放源的图片。参数serialNumber代表序列号，每台摄影机各不相同
+        return Result.success();
     }
 
 }

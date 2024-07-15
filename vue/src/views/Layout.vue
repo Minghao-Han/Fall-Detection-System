@@ -34,7 +34,7 @@
               <i class="el-icon-location"></i><span>信息管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="3-1">xxx信息</el-menu-item>
+              <el-menu-item index="/fallVideo">摔倒视频管理</el-menu-item>
               <el-menu-item index="3-2">yyy信息</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
