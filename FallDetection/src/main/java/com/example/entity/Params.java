@@ -10,6 +10,7 @@ public class Params {
 
     private Integer pageSize;
 
+    private String serialNumber;
 
     private String phone;
 
@@ -51,5 +52,13 @@ public class Params {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }

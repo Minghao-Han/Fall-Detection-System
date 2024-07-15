@@ -16,4 +16,12 @@
         </where>
     </select>
 
+    <update id="bind">
+        UPDATE camera
+        SET phone = #{camera.phone},
+            cameraName= #{camera.cameraName},
+            name= #{camera.name}
+        WHERE serialNumber = #{camera.serialNumber} AND (phone IS NULL)
+    </update>
+
 </mapper>
