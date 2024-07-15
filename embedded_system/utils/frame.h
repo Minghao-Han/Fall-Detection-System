@@ -1,10 +1,14 @@
 #ifndef _FRAME_H
 #define _FRAME_H 1
+#ifndef FRAME_BUFFER_SIZE
+#define FRAME_BUFFER_SIZE(w, h) ((w) * (h) * (3) / (2))
+#endif
 
 // #define FRAME_WIDTH 640
 // #define FRAME_HEIGHT 480
 #include <stddef.h>
 
+using namespace std;
 typedef unsigned char frame_t;
 typedef struct frame_buf_t {
     size_t frame_size;

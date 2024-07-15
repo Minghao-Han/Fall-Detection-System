@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <math.h>
 
-#include <sp_vio.h>
 #include <sp_sys.h>
 #include <sp_display.h>
 #include <stdlib.h>
@@ -37,10 +36,10 @@ double get_stride(int width, int bit)
 
 static char doc[] = "capture sample -- An example of capture yuv/raw";
 
-camera_t *camera_init(size_t yuv_width, size_t yuv_height,int channel_num){
+camera_t *camera_init(sp_sensors_parameters *camera_params,int channel_num){
     camera_t *camera = (camera_t *)malloc(sizeof(camera_t));
-    camera->yuv_width = yuv_width;
-    camera->yuv_height = yuv_height;
+    int32_t yuv_width=camera->yuv_width = camera_params->raw_width;
+    int32_t yuv_height=camera->yuv_height = camera_params->raw_height;
 
     int yuv_size = FRAME_BUFFER_SIZE(yuv_width, yuv_height);
     camera->frame_size = yuv_size;
@@ -55,7 +54,7 @@ camera_t *camera_init(size_t yuv_width, size_t yuv_height,int channel_num){
     void *camera_prt = sp_init_vio_module();
     camera->vio_camera_ptr = camera_prt;
     // open camera
-    int ret = sp_open_camera(camera_prt, 0, -1, 1, &yuv_width, &yuv_height);
+    int ret = sp_open_camera_v2(camera_prt, 0, -1, 1, camera_params,&yuv_width, &yuv_height);
     printf("wait for isp stability\n");
     sleep(2); // wait for isp stability
     printf("open camera ret:%d\n", ret);
@@ -73,28 +72,29 @@ camera_t *camera_init(size_t yuv_width, size_t yuv_height,int channel_num){
 
 void *camera_start(void *args){
     camera_t *camera = (camera_t *)args;
-    char *yuv_data = camera->camera_buf;
+    unsigned char *yuv_data = camera->camera_buf;
     int yuv_count = 0;
     camera_continue=1;
     int yuv_width = camera->yuv_width;
     int yuv_height = camera->yuv_height;
     int yuv_size = camera->frame_size;
     void *camera_prt = camera->vio_camera_ptr;
-    char yuv_filename[]="/home/sunrise/camera/yuv_data.yuv";
+    // char yuv_filename[]="/home/sunrise/camera/yuv_data.yuv";
     do
     {
         printf("capture time :%d\n", yuv_count);
 
-        sp_vio_get_yuv(camera_prt, yuv_data, yuv_width, yuv_height, 2000);
-        sprintf(yuv_filename, "yuv_%d.yuv", yuv_count++);
-        FILE *yuv_file = fopen(yuv_filename, "wb");
-        fwrite(yuv_data, sizeof(char), yuv_size, yuv_file);
-        fflush(yuv_file);
+        sp_vio_get_yuv(camera_prt, (char *)yuv_data, yuv_width, yuv_height, 2000);
+        // sprintf(yuv_filename, "yuv_%d.yuv", yuv_count++);
+        // FILE *yuv_file = fopen(yuv_filename, "wb");
+        // fwrite(yuv_data, sizeof(char), yuv_size, yuv_file);
+        // fflush(yuv_file);
         // fclose(yuv_file); ?需要吗
-    } while (camera_continue);
+        yuv_count++;
+    } while (camera_continue);// here
     sem_post(&camera_exited);
     
-    free(yuv_data); //要删
+    
 }
 void camera_destroy(camera_t *camera){
     camera_continue=0;

@@ -47,20 +47,3 @@ bool uploadFile(const char* filePath) {
     return false;
 }
 
-int main(int argc, char *argv[]) {
-    if(argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <file_path_to_upload>" << std::endl;
-        return 1;
-    }
-
-    const char* filePath = argv[1];
-
-    // 调用上传文件函数
-    if(uploadFile(filePath)) {
-        std::cout << "File uploaded successfully!" << std::endl;
-    } else {
-        std::cerr << "Failed to upload file." << std::endl;
-    }
-
-    return 0;
-}

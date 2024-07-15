@@ -2,6 +2,7 @@
 #define _CAMERA_H 1
 #include "frame.h"
 #include <stdint.h>
+#include <sp_vio.h>
 
 typedef struct camera_t{
     frame_t *camera_buf;
@@ -11,7 +12,7 @@ typedef struct camera_t{
     int32_t yuv_height;
 }camera_t;
 
-camera_t *camera_init(size_t width, size_t height,int channel_num);
+camera_t *camera_init(sp_sensors_parameters *camera_params,int channel_num);
 
 /** 
  * @brief Start the camera module
