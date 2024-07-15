@@ -1,5 +1,20 @@
 #include "frame.h"
 
+frame_buf_t *frame_buf_init4yuv(size_t frame_size, size_t length){
+    frame_buf_t *frame_buf = (frame_buf_t *)malloc(sizeof(frame_buf_t));
+    if(frame_buf == NULL){
+        return NULL;
+    }
+    frame_buf->frame_size=frame_size;
+    frame_buf->length = length;
+    frame_buf->current_ptr = 0;
+    frame_buf->frames = (frame_t *)malloc(sizeof(frame_t) * frame_size);
+    if(frame_buf->frames == NULL){
+        free(frame_buf);
+        return NULL;
+    }
+    return frame_buf;
+}
 
 frame_buf_t *frame_buf_init(size_t width, size_t height,int channel_num, size_t length){
     frame_buf_t *frame_buf = (frame_buf_t *)malloc(sizeof(frame_buf_t));

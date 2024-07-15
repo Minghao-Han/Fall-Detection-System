@@ -93,6 +93,7 @@ int main(){
     
 
     // fall detection init and start
+    // init sem for fall detection, set initial value to 0
     sem_init(&fall_sem, 0, 0);
     fall_detector_t *fall_detector = fall_detector_init(camera_buf, &fall_sem, clip);
     pthread_create(&threads[FALL_DETECTION_THREAD], NULL, &fall_detector_start, (void *)fall_detector);

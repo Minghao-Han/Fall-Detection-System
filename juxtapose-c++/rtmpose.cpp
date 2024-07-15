@@ -153,7 +153,7 @@ std::vector<std::vector<PosePoint>> RTMPose::operator()(const cv::Mat& input_mat
             memcpy(simcc_dims[i], simcc_shape, 3 * SIZE_OF_INT);
             // The type reinterpret_cast should be determined according to the output type
             // For example: HB_DNN_TENSOR_TYPE_F32 is float
-            memcpy((void *)(simmc_result[i]), (void *)mem, SIMCC_LEN[i] * SIZE_OF_FLOAT);
+            memcpy((void *)(simmc_result[i]), (void *)(mem->virAddr), SIMCC_LEN[i] * SIZE_OF_FLOAT);
             // 释放ouput内存
             hbSysFreeMem(&(tensor->sysMem[0]));
         }
