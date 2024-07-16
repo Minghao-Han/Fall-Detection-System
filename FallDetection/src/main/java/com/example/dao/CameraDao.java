@@ -18,4 +18,5 @@ public interface CameraDao extends Mapper<Camera> {
     void unbindPhone(@Param("serialNumber") String serialNumber);
 
     int bind(@Param("camera") Camera camera);
+    int getAffectedRows(@Param("camera") Camera camera);
 }

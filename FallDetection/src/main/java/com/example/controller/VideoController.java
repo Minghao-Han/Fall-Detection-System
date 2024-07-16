@@ -2,6 +2,7 @@ package com.example.controller;
 import com.example.common.Message;
 import com.example.common.Result;
 import com.example.service.FallVideoService;
+import com.example.service.VideoProcessingService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -18,6 +19,8 @@ public class VideoController {
 
     @javax.annotation.Resource
     private FallVideoService fallVideoService;
+    @javax.annotation.Resource
+    private VideoProcessingService videoProcessingService;
 
     @Value("${video.upload.directory}")
     private String uploadDir;
@@ -35,6 +38,7 @@ public class VideoController {
                 /*fallVideoService.addData(serialNumber,uploadFile.getName())*/;//里面应该有相关参数，只包括序列号似乎即可
                 //短信发送接口的调用
                 /*Message.sendMessage((int)(Math.random()*1000000)+"", "13657408690");*/
+                videoProcessingService.transcodeVideo(uploadFile);
                 return new ResponseEntity<>("Video uploaded successfully", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Video upload failed: File is empty", HttpStatus.BAD_REQUEST);
