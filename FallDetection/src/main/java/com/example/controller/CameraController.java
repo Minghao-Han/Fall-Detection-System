@@ -49,14 +49,12 @@ public class CameraController {
     @PostMapping("/bind")
     public Result bind(@RequestBody Camera camera){
         if (camera.getSerialNumber() != null && camera.getCameraName()!=null && camera.getName()!=null ) {
-/*            Params params=new Params();
-            params.setSerialNumber(camera.getSerialNumber());
-            params.setCameraName(camera.getCameraName());
-            params.setName(camera.getName());
-            params.setPhone(camera.getPhone());*/
             int rows = cameraService.bind(camera);
-            if (rows !=1){
+            int affectedRows = cameraService.getAffectedRows(camera);
+            if (rows == 0 && affectedRows == 1){
                 return Result.error("该序列号已经被绑定");
+            }else if (rows ==0 && affectedRows == 0){
+                return Result.error("该序列码不合法");
             }
         }else{
             throw new CustomException("存在空字段");

@@ -35,4 +35,4 @@ pagehelper:
 
 video:
   upload:
-    directory: src/main/resources/static/videos
+    directory: src/main/resources/static/videos/

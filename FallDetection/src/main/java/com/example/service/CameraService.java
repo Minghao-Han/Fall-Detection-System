@@ -71,6 +71,9 @@ public class CameraService {
     public int bind(Camera camera) {
         return cameraDao.bind(camera);
     }
+    public int getAffectedRows(Camera camera){
+        return cameraDao.getAffectedRows(camera);
+    }
 }
 
 
