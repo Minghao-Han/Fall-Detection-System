@@ -45,11 +45,14 @@ public class AdminService {
         if (admin.getName() == null || "".equals(admin.getName())) {
             throw new CustomException("用户名不能为空");
         }
-        if(admin.getPhone().length()!=11){
-            throw new CustomException("手机号长度不正确");
+        if(admin.getPhone() == null || "".equals(admin.getPhone())) {
+            throw new CustomException("手机号不能为空");
         }
         if(admin.getPassword()==null||"".equals(admin.getPassword())){
             throw new CustomException("密码不能为空");
+        }
+        if(admin.getPhone().length()!=11||!admin.getPhone().matches("\\d{11}")){
+            throw new CustomException("手机号格式不正确，应为11位数字");
         }
         // 2. 进行重复性判断，同一名字的管理员不允许重复新增：只要根据用户名去数据库查询一下就可以了
         Admin user = adminDao.findByPhone(admin.getPhone());
@@ -58,9 +61,9 @@ public class AdminService {
             throw new CustomException("该手机号已存在，请更换手机号");
         }
         // 初始化一个密码
-        if (admin.getPassword() == null) {
-            admin.setPassword("123456");
-        }
+//        if (admin.getPassword() == null) {
+//            admin.setPassword("123456");
+//        }
         adminDao.insertSelective(admin);
     }
 

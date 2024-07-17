@@ -36,3 +36,6 @@ pagehelper:
 video:
   upload:
     directory: src/main/resources/static/videos/
+camera:
+  stream:
+    directory: streamFrame/
