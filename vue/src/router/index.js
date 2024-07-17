@@ -55,12 +55,15 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to ,from, next) => {
-  if (to.path ==='/login') {
+  if (to.path === '/login') {
     next();
+  } else if (to.path === '/register') {
+    next();
+  } else {
+    const user = localStorage.getItem("user");
+    if (!user && to.path !== '/login') {
+      return next("/login");
   }
-  const user = localStorage.getItem("user");
-  if (!user && to.path !== '/login') {
-    return next("/login");
   }
   next();
 })

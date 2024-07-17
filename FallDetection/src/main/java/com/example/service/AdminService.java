@@ -45,8 +45,8 @@ public class AdminService {
         if (admin.getName() == null || "".equals(admin.getName())) {
             throw new CustomException("用户名不能为空");
         }
-        if(admin.getPhone().length()!=11){
-            throw new CustomException("手机号长度不正确");
+        if (admin.getPhone() == null || admin.getPhone().length() != 11 || !admin.getPhone().matches("\\d{11}")) {
+            throw new CustomException("手机号格式不正确，应为11位数字");
         }
         if(admin.getPassword()==null||"".equals(admin.getPassword())){
             throw new CustomException("密码不能为空");
