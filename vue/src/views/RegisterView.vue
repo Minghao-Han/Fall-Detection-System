@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="width: 400px; height: 350px; margin: 150px auto; background-color:rgba(107,149,224,0.5); border-radius: 10px">
+    <div style="width: 400px; height: 400px; margin: 150px auto; background-color:rgba(107,149,224,0.5); border-radius: 10px">
       <div style="width: 100%; height: 100px; font-size: 30px; line-height: 100px; text-align: center; color: #4a5ed0">欢迎注册</div>
       <div style="margin-top: 25px; text-align: center; height: 320px;">
         <el-form :model="admin">
@@ -17,6 +17,7 @@
             <el-button style="width: 80%; margin-top: 10px" type="primary" @click="register()">注册</el-button>
           </el-form-item>
         </el-form>
+        <el-link type="primary" @click="goLogin()">已有账号？点击登录</el-link>
       </div>
     </div>
   </div>
@@ -52,6 +53,9 @@ export default {
           });
         }
       })
+    },
+    goLogin(){
+      this.$router.push("login");
     }
   }
 }
