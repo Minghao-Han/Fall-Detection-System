@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    padding: 0;
+    padding: 0 !important;
     overflow: hidden;
 }
 /*把所有的元素变成盒状模型*/
