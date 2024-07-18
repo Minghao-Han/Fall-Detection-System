@@ -90,9 +90,10 @@ public class CameraController {
 
     @PostMapping("/receiveFrame")
     public void receiveFrame(@RequestBody byte[] frameData) {
-        frameProcessor.init();
+        if(frameProcessor.getStatus() != true){
+            frameProcessor.init();
+        }
         frameProcessor.receiveFrame(frameData);
-
     }
 
 

@@ -48,12 +48,11 @@ public class VideoController {
         }
     }
 
-    @GetMapping("/fallClip/{fileName:.+}")
+    @GetMapping("/fallClips/{fileName:.+}")
     public ResponseEntity<Resource> getVideo(@PathVariable String fileName) throws IOException {
         // 返回存储在服务器上的视频文件，前端可以通过URL访问这个接口来获取视频流
         File file = new File(uploadDir + fileName);
         Resource resource = new UrlResource(file.toURI());
-
         if (resource.exists() || resource.isReadable()) {
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType("video/mp4"))

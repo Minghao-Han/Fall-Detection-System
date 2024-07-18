@@ -25,10 +25,17 @@ public class FrameProcessor {
 
     private BlockingQueue<VideoFrame> frameQueue;
 
+    private boolean isInitialized = false;
+
+    public boolean getStatus(){
+        return isInitialized;
+    }
+
 //    @PostConstruct
     public void init() {
         frameQueue = new LinkedBlockingQueue<>();
         startProcessing();
+        isInitialized = true;
     }
 
     @PreDestroy
@@ -66,7 +73,7 @@ public class FrameProcessor {
         try {
             BufferedImage img = convertNV12toBufferedImage(nv12Data, 640, 480);
             if (img != null) {
-                File outputFile = new File(saveDirectory + File.separator + System.currentTimeMillis() + ".jpg");
+                File outputFile = new File(saveDirectory + "currentFrame.jpg");
                 ImageIO.write(img, "jpg", outputFile);
                 System.out.println("Converted and saved frame as: " + outputFile.getAbsolutePath());
             }

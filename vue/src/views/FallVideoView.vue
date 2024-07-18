@@ -53,8 +53,8 @@ export default {
       total:0,
       dialogVisible:false,
       playerOptions: {
-        height: '520',
-        width:'720',
+        height: '480',
+        width:'640',
         autoplay: true,
         muted: false,
         language: 'en',
@@ -100,7 +100,16 @@ export default {
     },
     play(videoName){
       this.dialogVisible = true;
-      this.playerOptions.sources="http://localhost:8080/videos/"+videoName+".mp4"
+      request.get("/video/fallClips/${videoName}"+".mp4", {
+        responseType: "blob"
+      })
+          .then(res =>{
+            const videoBlob = new Blob([res], {type: 'video/mp4'});
+            this.playerOptions.sources[0].src = URL.createObjectURL(videoBlob);
+          })
+          .catch(error =>{
+            console.error('Error fetching video', error);
+          });
     }
   }
 }
