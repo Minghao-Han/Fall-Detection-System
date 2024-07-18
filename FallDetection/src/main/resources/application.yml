@@ -33,4 +33,7 @@ pagehelper:
 
 video:
   upload:
-    directory: src/main/resources/static/videos/
+    directory: fallClips/
+camera:
+  stream:
+    directory: streamFrame/

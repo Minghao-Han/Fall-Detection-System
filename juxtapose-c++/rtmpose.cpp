@@ -1,21 +1,21 @@
 #include "rtmpose.hpp"
-#include "utils.hpp"
-#include <filesystem>
+#include <iostream>
 #define SIZE_OF_INT 4
 #define SIZE_OF_FLOAT 4
 
 
 const int32_t RTMPose::SIMCC_LEN[2] = {SIMCC_X_LEN, SIMCC_Y_LEN};
 
-RTMPose::RTMPose(const string& model_path, const string& device) {
-    if (!filesystem::exists(model_path)) {
+RTMPose::RTMPose(const char* model_path, const string& device) {
+    struct stat buffer;
+    if (stat(model_path, &buffer) != 0) {
         throw std::runtime_error("Model path does not exist.");
     }
     
     // 第一步加载模型
     hbPackedDNNHandle_t packed_dnn_handle;
-    const char* model_file_name= "./mobilenetv1.bin";
-    hbDNNInitializeFromFiles(&packed_dnn_handle, &model_file_name, 1);
+    // const char* model_file_name= "./mobilenetv1.bin";
+    hbDNNInitializeFromFiles(&packed_dnn_handle, &model_path, 1);
 
     // 第二步获取模型名称
     const char **model_name_list;
@@ -39,7 +39,7 @@ RTMPose::RTMPose(const string& model_path, const string& device) {
     std = Scalar(58.395, 57.12, 57.375);
     // this->device = device;
 
-    cout << "Loaded " << model_path << " onnx model in."  << endl;
+    std::cout << "Loaded " << model_path << " onnx model in."  << endl;
 }
 
 std::vector<std::vector<PosePoint>> RTMPose::operator()(const cv::Mat& input_mat, const vector<DetectBox>& boxs)
@@ -101,8 +101,8 @@ std::vector<std::vector<PosePoint>> RTMPose::operator()(const cv::Mat& input_mat
         hbDNNTensor input_tensor;
         input_tensor.properties = input_properties;
         auto &mem = input_tensor.sysMem[0];
-        int yuv_length = 224 * 224 * 3;
-        hbSysAllocCachedMem(&mem, yuv_length);
+        int data_length = 1*3*256*192;
+        hbSysAllocCachedMem(&mem, data_length);
         input_tensor.properties.alignedShape = input_tensor.properties.validShape;
         memcpy(mem.virAddr, input_image, input_image_array.size());
         hbSysFlushMem(&mem, HB_SYS_MEM_CACHE_CLEAN);
@@ -137,7 +137,7 @@ std::vector<std::vector<PosePoint>> RTMPose::operator()(const cv::Mat& input_mat
 
         // 第八步获取输出数据
         float simcc_x_result[SIMCC_X_LEN];
-        float simcc_y_result[SIMCC_X_LEN];
+        float simcc_y_result[SIMCC_Y_LEN];
         float *simmc_result[2]={simcc_x_result,simcc_y_result};
 
         int simcc_x_dims[3];
@@ -145,16 +145,15 @@ std::vector<std::vector<PosePoint>> RTMPose::operator()(const cv::Mat& input_mat
         int *simcc_dims[2]={simcc_x_dims,simcc_y_dims};
         
         for(int i=0;i<model_output_count;i++){
-            hbDNNTensor *tensor = output_tensors;
+            hbDNNTensor *tensor = output_tensors+i;
             hbSysMem *mem = &(tensor->sysMem[0]);
             // output_tensors bpu->cpu
             hbSysFlushMem(mem, HB_SYS_MEM_CACHE_INVALIDATE);
             int *simcc_shape = tensor->properties.validShape.dimensionSize;
-            int simcc_tensor_len = simcc_shape[0] * simcc_shape[1] * simcc_shape[2];
             memcpy(simcc_dims[i], simcc_shape, 3 * SIZE_OF_INT);
             // The type reinterpret_cast should be determined according to the output type
             // For example: HB_DNN_TENSOR_TYPE_F32 is float
-            hbSysReadMem(reinterpret_cast<char*>(simmc_result[i]), mem, SIMCC_LEN[i] * SIZE_OF_FLOAT);
+            memcpy((void *)(simmc_result[i]), (void *)(mem->virAddr), SIMCC_LEN[i] * SIZE_OF_FLOAT);
             // 释放ouput内存
             hbSysFreeMem(&(tensor->sysMem[0]));
         }
@@ -162,13 +161,13 @@ std::vector<std::vector<PosePoint>> RTMPose::operator()(const cv::Mat& input_mat
         // 释放input内存
         hbSysFreeMem(&(input_tensor.sysMem[0]));
 
-        Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
-            memory_info,
-            input_image_array.data(),
-            input_image_array.size(),
-            input_shape.data(),
-            input_shape.size()
-        );
+        // Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
+        //     memory_info,
+        //     input_image_array.data(),
+        //     input_image_array.size(),
+        //     input_shape.data(),
+        //     input_shape.size()
+        // );
 
         // pose process
         // 后处理

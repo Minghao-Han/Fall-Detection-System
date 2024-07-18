@@ -9,7 +9,7 @@ const std::vector<float> IMAGE_MEAN{ 123.675, 116.28, 103.53 };
 const std::vector<float> IMAGE_STD{ 58.395, 57.12, 57.375 };
 
 
-struct DetectBox
+typedef struct DetectBox
 {
 	float left;
 	float top;
@@ -32,9 +32,11 @@ struct DetectBox
 	{
 		return left != -1 && top != -1 && right != -1 && bottom != -1 && score != -1.0 && label != -1;
 	}
-};
+	DetectBox(float left, float top, float right, float bottom, float score, int label)
+		: left(left), top(top), right(right), bottom(bottom), score(score), label(label) {}
+}DetectBox;
 bool BoxCompare(const DetectBox& a,const DetectBox& b);
-struct PosePoint
+typedef struct PosePoint
 {
 	float x;
 	float y;
@@ -46,7 +48,7 @@ struct PosePoint
 		y = 0.0;
 		score = 0.0;
 	}
-};
+}PosePoint;
 
 
 typedef PosePoint Vector2D;

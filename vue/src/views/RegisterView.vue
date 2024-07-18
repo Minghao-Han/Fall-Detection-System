@@ -75,6 +75,9 @@ export default {
           });
         }
       })
+    },
+    goLogin(){
+      this.$router.push("login");
     }
   }
 }
