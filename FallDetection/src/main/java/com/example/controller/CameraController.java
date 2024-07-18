@@ -53,7 +53,8 @@ public class CameraController {
     //编辑摄像头信息
     @PostMapping
     public Result save(@RequestBody Camera camera) {
-        if (camera.getCameraName()!=null && camera.getName()!=null ) {
+        if ((camera.getCameraName() != null && !camera.getCameraName().isEmpty()) &&
+                (camera.getName() != null && !camera.getName().isEmpty())) {
             cameraService.update(camera);
         }else{
            throw new CustomException("存在空字段");
