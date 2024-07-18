@@ -15,7 +15,9 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button style="width: 80%; margin-top: 10px" type="primary" @click="login()">登录</el-button>
+
                 </el-form-item>
+                <el-link type="primary" @click="goRegister()">没有账号？点击注册</el-link>
               </el-form>
             </div>
           </div>
@@ -74,6 +76,9 @@ export default {
           });
         }
       })
+    },
+    goRegister(){
+      this.$router.push("/register");
     }
   }
 }

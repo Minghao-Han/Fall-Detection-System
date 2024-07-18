@@ -15,7 +15,7 @@
         <el-table-column label="操作" >
           <template slot-scope="scope">
             <el-button type="primary" @click="edit(scope.row)">编辑</el-button>
-            <el-popconfirm title="确定删除吗？" @confirm="unbind(scope.row.serialNumber)">
+            <el-popconfirm title="确定解绑吗？" @confirm="unbind(scope.row.serialNumber)">
               <el-button slot="reference" type="danger" style="margin-left: 5px">解绑</el-button>
             </el-popconfirm>
           </template>
@@ -34,7 +34,7 @@
       </el-pagination>
     </div>
     <div>
-      <el-dialog title="请修改信息" :visible.sync="dialogFormVisible" width="40%">
+      <el-dialog title="输入信息" :visible.sync="dialogFormVisible" width="40%">
         <el-form :model="form">
           <el-form-item v-if="isShow" label="序列码" prop="serialNumber" label-width="15%">
             <el-input v-model="form.serialNumber" autocomplete="off" style="width:90%"></el-input>

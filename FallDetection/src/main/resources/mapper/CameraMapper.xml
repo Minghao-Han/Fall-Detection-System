@@ -24,4 +24,9 @@
         WHERE serialNumber = #{camera.serialNumber} AND (phone IS NULL)
     </update>
 
+    <select id="getAffectedRows" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM camera
+        WHERE serialNumber = #{camera.serialNumber}
+    </select>
+
 </mapper>
