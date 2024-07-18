@@ -36,14 +36,14 @@ double get_stride(int width, int bit)
 
 static char doc[] = "capture sample -- An example of capture yuv/raw";
 
-camera_t *camera_init(sp_sensors_parameters *camera_params,int channel_num){
+camera_t *camera_init(sp_sensors_parameters *camera_params,int channel_num,frame_buf_t *camera_buf){
     camera_t *camera = (camera_t *)malloc(sizeof(camera_t));
     int32_t yuv_width=camera->yuv_width = camera_params->raw_width;
     int32_t yuv_height=camera->yuv_height = camera_params->raw_height;
 
     int yuv_size = FRAME_BUFFER_SIZE(yuv_width, yuv_height);
     camera->frame_size = yuv_size;
-    camera->camera_buf = (frame_t *)malloc(yuv_size * sizeof(char));
+    camera->camera_buf = camera_buf;
 
     char ch = 0;
     int is_enter = 0;
@@ -72,28 +72,35 @@ camera_t *camera_init(sp_sensors_parameters *camera_params,int channel_num){
 
 void *camera_start(void *args){
     camera_t *camera = (camera_t *)args;
-    unsigned char *yuv_data = camera->camera_buf;
+    frame_buf_t *camera_buf = camera->camera_buf;
     int yuv_count = 0;
     camera_continue=1;
     int yuv_width = camera->yuv_width;
     int yuv_height = camera->yuv_height;
     int yuv_size = camera->frame_size;
+    char *yuv_data = (char *)malloc(yuv_size * sizeof(char));
+    int16_t buf_len = camera_buf->length;
     void *camera_prt = camera->vio_camera_ptr;
-    // char yuv_filename[]="/home/sunrise/camera/yuv_data.yuv";
+    char yuv_filename[]="/home/sunrise/clip/right.yuv";
+    int16_t writer_head;
     do
     {
-        printf("capture time :%d\n", yuv_count);
-
-        sp_vio_get_yuv(camera_prt, (char *)yuv_data, yuv_width, yuv_height, 2000);
-        // sprintf(yuv_filename, "yuv_%d.yuv", yuv_count++);
+        // printf("capture time :%d\n", yuv_count);
+        // printf("camera_buf %p\n",yuv_data);
+        sp_vio_get_yuv(camera_prt, yuv_data, yuv_width, yuv_height, 2000);
+        writer_head = camera_buf->writer_head;
+        pthread_mutex_lock((camera_buf->buf_locks)+writer_head);
+        memcpy(camera_buf->frames + writer_head * yuv_size, yuv_data, yuv_size);
+        pthread_mutex_unlock((camera_buf->buf_locks)+writer_head);
+        camera_buf->writer_head = (writer_head + 1) % buf_len;
         // FILE *yuv_file = fopen(yuv_filename, "wb");
         // fwrite(yuv_data, sizeof(char), yuv_size, yuv_file);
         // fflush(yuv_file);
-        // fclose(yuv_file); ?需要吗
-        yuv_count++;
-    } while (camera_continue);// here
+        // fclose(yuv_file); //?需要吗
+        // yuv_count++;
+    }while (camera_continue);// here
     sem_post(&camera_exited);
-    
+    free(yuv_data);
     
 }
 void camera_destroy(camera_t *camera){
@@ -101,6 +108,5 @@ void camera_destroy(camera_t *camera){
     sem_wait(&camera_exited);
     sp_vio_close(camera->vio_camera_ptr);
     sp_release_vio_module(camera->vio_camera_ptr);
-    free(camera->camera_buf);
     free(camera);
 }

@@ -9,7 +9,8 @@ LDFLAGS = -Wl,-rpath-link,/usr/lib/board/lib \
         -Wl,-rpath-link,/usr/lib/board/lib/aarch64-linux-gnu \
         -L/mnt/dependency/opencv/lib/  -lopencv_world\
         -L/mnt/dependency/lib/hbbpu -lcnn_intf -lhlog -ldnn -lhbrt_bernoulli_aarch64 \
-        -L/mnt/dependency/lib/hbbpu -ldnn
+        -L/mnt/dependency/lib/hbbpu -ldnn \
+		-L/mnt/dependency/lib -lcurl
 
 # 使用pkg-config获取OpenCV的编译和链接标志
 PKG_CFLAGS = $(shell pkg-config --cflags opencv)
@@ -17,7 +18,7 @@ PKG_LDFLAGS = $(shell pkg-config --libs opencv)
 
 # 定义源文件和目标文件
 SRC_FOLDER = /mnt/git_repo/embedded_system
-OBJS = clip.o conf.o frame.o main.o detection.o camera.o
+OBJS = clip.o conf.o frame.o main.o detection.o camera.o alert.o video_upload.o
 
 # 生成的可执行文件
 TARGET = sys_test
@@ -46,6 +47,12 @@ camera.o: $(SRC_FOLDER)/camera_module/camera.c
 	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
 
 main.o: $(SRC_FOLDER)/main.c
+	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
+
+alert.o: $(SRC_FOLDER)/transmit_module/alert.cpp
+	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
+
+video_upload.o: $(SRC_FOLDER)/transmit_module/video_upload.cpp
 	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
 
 # 规则：清理生成的文件
