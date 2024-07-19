@@ -22,7 +22,7 @@
                 <el-button round style="width: 80%; height: 40px" type="primary" @click="register()">注册</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button round style="width: 80%; height: 40px" type="primary" @click="jumpToLogin()">登录</el-button>
+                <el-button round style="width: 80%; height: 40px" type="primary" @click="goLogin()">登录</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -51,8 +51,7 @@ export default {
   name: "Register",
   data() {
     return {
-      admin:{
-      }
+      admin: {}
     }
   },
   //页面加载的时候做的事情在created里面
@@ -60,7 +59,7 @@ export default {
   },
   //定义页面上一些控件出发的事件调用的方法
   methods: {
-    register(){
+    register() {
       request.post("/admin/register", this.admin).then(res => {
         if (res.code === '0') {
           this.$message({
@@ -76,8 +75,8 @@ export default {
         }
       })
     },
-    jumpToLogin(){
-      this.$router.push("/login");
+    goLogin() {
+      this.$router.push("login");
     }
   }
 }

@@ -2,17 +2,26 @@ package com.example.controller;
 
 import com.example.exception.CustomException;
 import com.example.service.CameraService;
+import com.example.service.FrameProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
 import com.example.common.Result;
 import com.example.entity.Camera;
 import com.example.entity.Params;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.io.Console;
+import java.awt.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 
@@ -20,8 +29,14 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/camera")
 public class CameraController {
-    @Resource
+    @javax.annotation.Resource
     private CameraService cameraService;
+
+    @Autowired
+    private FrameProcessor frameProcessor;
+
+    @Value("${camera.stream.directory}")
+    private String framePath;
 
     @GetMapping
     public Result getCamera() {
@@ -74,9 +89,20 @@ public class CameraController {
         this.cameraService = cameraService;
     }
 
-    @GetMapping("/startCamera")
-    public void startCamera() {
-        cameraService.startCamera();
+    @PostMapping("/receiveFrame")
+    public void receiveFrame(@RequestBody byte[] frameData) {
+        if(frameProcessor.getStatus() != true){
+            frameProcessor.init();
+        }
+        frameProcessor.receiveFrame(frameData);
+    }
+
+
+    @GetMapping(value = "/stream", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> pushStream() throws IOException {
+        Path imagePath = Path.of(framePath,"currentFrame.jpg");
+        byte[] imageBytes = Files.readAllBytes(imagePath);
+        return ResponseEntity.ok().body(imageBytes);
     }
 
 }

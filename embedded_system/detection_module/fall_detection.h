@@ -15,7 +15,7 @@ fall_detector_t *fall_detector_init(frame_t *camera_buf, sem_t *fall_sem,frame_b
  * @brief Start the fall detection module
  * @param fall_detector: fall_detector_t *
  */
-void *fall_detector_start(void *);
+void *fall_detector_start(void *args);
 void fall_detector_destroy(fall_detector_t *fall_detector);
 
 #endif
