@@ -100,7 +100,7 @@ export default {
     },
     play(videoName){
       this.dialogVisible = true;
-      request.get("/video/fallClips/${videoName}"+".mp4", {
+      request.get("/video/fallClips/"+ videoName+".mp4", {
         responseType: "blob"
       })
           .then(res =>{
