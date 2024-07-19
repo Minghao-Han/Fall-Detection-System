@@ -1,28 +1,49 @@
 <template>
-  <div>
-    <div style="width: 400px; height: 400px; margin: 150px auto; background-color:rgba(107,149,224,0.5); border-radius: 10px">
-      <div style="width: 100%; height: 100px; font-size: 30px; line-height: 100px; text-align: center; color: #4a5ed0">欢迎注册</div>
-      <div style="margin-top: 25px; text-align: center; height: 320px;">
-        <el-form :model="admin">
-          <el-form-item>
-            <el-input v-model="admin.name" prefix-icon="el-icon-user" style="width: 80%" placeholder="请输入用户名"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="admin.phone" prefix-icon="el-icon-user" style="width: 80%" placeholder="请输入手机号"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="admin.password" prefix-icon="el-icon-lock" style="width: 80%" placeholder="请输入密码"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button style="width: 80%; margin-top: 10px" type="primary" @click="register()">注册</el-button>
-          </el-form-item>
-        </el-form>
-        <el-link type="primary" @click="goLogin()">已有账号？点击登录</el-link>
+  <div class="full-screen-background"style="width: content-box;height: content-box;background-image: url('/background.png')">
+    <el-container>
+      <div style="width: 900px; height: 450px; margin: 200px auto;
+          background-color:rgba(252,252,252,1); border-radius: 10px;display: flex;">
+        <h2 style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%);">独居老人检测系统</h2>
+        <div style="width: 100%; height: 100%; text-align: center;flex: 1">
+          <div style="width: 80%; margin: 70px auto; text-align: center;">
+            <div style="display: inline-block;background-color: #7a7ab9; height: 3px; width: 80%; margin-bottom: 5px;"></div>
+            <h4 style="margin-left: 40px; margin-bottom: 30px ;text-align: left; width: 80% ; font-weight: normal">请注册您的账号</h4>
+            <el-form :model="admin">
+              <el-form-item>
+                <el-input size="small" v-model="admin.name" prefix-icon="el-icon-user" style="width: 80%" placeholder="请输入您的用户名"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-input size="small" v-model="admin.phone" maxlength="11" prefix-icon="el-icon-phone" style="width: 80%" placeholder="请输入您的手机号"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-input size="small" v-model="admin.password" prefix-icon="el-icon-lock" style="width: 80%" placeholder="请输入您的密码"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button round style="width: 80%; height: 40px" type="primary" @click="register()">注册</el-button>
+              </el-form-item>
+              <el-form-item>
+                <el-button round style="width: 80%; height: 40px" type="primary" @click="goLogin()">返回登录界面</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </div>
+        <div style="width: 1px; background-color: rgba(204, 204, 204, 0.5);"></div>
+        <div style="flex: 1" class="el-container">
+          <div class="background" :style="{ backgroundImage:'url(' + require('@/assets/walking.gif') + ')' }">
+          </div>
+        </div>
       </div>
-    </div>
+    </el-container>
   </div>
 </template>
-
+<style>
+.background {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+</style>
 <script>
 
 import request from "@/utils/request.js";
@@ -30,7 +51,8 @@ export default {
   name: "Register",
   data() {
     return {
-      admin:{}
+      admin:{
+      }
     }
   },
   //页面加载的时候做的事情在created里面
@@ -55,7 +77,7 @@ export default {
       })
     },
     goLogin(){
-      this.$router.push("login");
+      this.$router.push("/login");
     }
   }
 }

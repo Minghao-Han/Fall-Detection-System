@@ -1,4 +1,6 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
+<!--    xmlns="http://www.w3.org/1999/html"-->
+
   <div>
     <div>
       <el-button @click="table = true" type="primary" style="margin-left: 16px;">
