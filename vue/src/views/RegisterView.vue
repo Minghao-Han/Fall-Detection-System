@@ -22,7 +22,7 @@
                 <el-button round style="width: 80%; height: 40px" type="primary" @click="register()">注册</el-button>
               </el-form-item>
               <el-form-item>
-                <el-button round style="width: 80%; height: 40px" type="primary">返回登录界面</el-button>
+                <el-button round style="width: 80%; height: 40px" type="primary" @click="jumpToLogin()">登录</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -75,6 +75,9 @@ export default {
           });
         }
       })
+    },
+    jumpToLogin(){
+      this.$router.push("/login");
     }
   }
 }
