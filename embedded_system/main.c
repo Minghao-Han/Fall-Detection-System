@@ -27,7 +27,7 @@
 
 pthread_mutex_t camera_buf_lock;
 
-static frame_t *camera_buf;
+// static frame_t *camera_buf;
 static bool continue_loop = true;
 static sem_t fall_sem;
 
@@ -82,6 +82,7 @@ int main(){
     int16_t frame_buf_length = frame_len_seconds*fps; // can store 7 seconds 
     frame_buf_t *frame_buf = frame_buf_init(sensor_params.raw_width,sensor_params.raw_height,channel_num, frame_buf_length);
 
+    size_t frame_size = FRAME_BUFFER_SIZE(sensor_params.raw_width, sensor_params.raw_height);
 
     pthread_t threads[5];
     // camera init and start
@@ -100,15 +101,18 @@ int main(){
         exit(EXIT_FAILURE);
     }
     /******填充sockaddr_in******/
-    bzero(&server_info,sizeof(server_info));  //初始化结构体
-    server_info.sin_family = AF_INET;  //设置地址家族 IPV4
-    server_info.sin_port = htons(atoi(config.server_ip));  //设置端口
+    bzero(&server_info, sizeof(server_info));  // 初始化结构体
+    server_info.sin_family = AF_INET;  // 设置地址家族 IPV4
+    // 假设 config.server_port 是一个包含端口号的字符串
+    printf("server ip:%s\n",config.server_ip);
+    printf("server port:%d\n",config.server_port);
+    server_info.sin_port = htons(config.server_port);  // 设置端口
     // 将 IP 地址从字符串转换为网络字节序，并设置到结构体中
     if (inet_pton(AF_INET, config.server_ip, &server_info.sin_addr) <= 0) {
         perror("inet_pton error");
         exit(EXIT_FAILURE);
     }
-    stream_t *stream = stream_init(&server_info, (void *)camera_buf, sizeof(camera_buf));
+    stream_t *stream = stream_init(&server_info, frame_buf,frame_size);
     pthread_create(&threads[VIDEO_STREAM], NULL, &stream_start, (void *)stream);
 
     // init clip and its saver 
@@ -125,8 +129,9 @@ int main(){
     // fall detection init and start
     // init sem for fall detection, set initial value to 0
     sem_init(&fall_sem, 0, 0);
-    fall_detector_t *fall_detector = fall_detector_init(&fall_sem, frame_buf);
-    pthread_create(&threads[FALL_DETECTION_THREAD], NULL, &fall_detector_start, (void *)fall_detector);
+    fall_detector_t *fall_detector=NULL;
+    // fall_detector_t *fall_detector = fall_detector_init(&fall_sem, frame_buf);
+    // pthread_create(&threads[FALL_DETECTION_THREAD], NULL, &fall_detector_start, (void *)fall_detector);
     
     upload_init(-1,-1,NULL,NULL);
 

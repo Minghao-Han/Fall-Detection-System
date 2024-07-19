@@ -1,5 +1,7 @@
 #ifndef _DETECT_RESULT_H
 #define _DETECT_RESULT_H 1
+#include <vector>
+#include <array>
 
 typedef struct DetectBox
 {
@@ -44,14 +46,13 @@ typedef struct PosePoint
 
 
 struct Result {
-    vector<vector<PosePoint>> kpts;
-    vector<DetectBox> bboxes;
+    std::array<PosePoint,17> kpts;
+    DetectBox bboxes;
     // map<string, double> speed;
 };
-
-bool BoxCompare(
-	const DetectBox& a,
-	const DetectBox& b) {
-	return a.score > b.score;
-}
+struct Results {
+    std::vector<std::array<PosePoint,17>> kptss;
+    std::vector<DetectBox> bboxes;
+    // map<string, double> speed;
+};
 #endif

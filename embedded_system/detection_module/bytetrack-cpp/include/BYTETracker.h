@@ -2,7 +2,7 @@
 
 #include "/mnt/juxtapose-c++/detection.hpp"
 #include "STrack.h"
-#include "utils.hpp"
+#include "/mnt/git_repo/embedded_system/detection_module/DetecResult.h"
 #include <opencv2/core/core.hpp> // Include the appropriate header file for 'Scalar'
 
 // struct Object

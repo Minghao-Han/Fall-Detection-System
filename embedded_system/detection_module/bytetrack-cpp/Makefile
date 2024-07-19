@@ -1,6 +1,6 @@
 # Makefile
-CXX = g++
-CXXFLAGS = -std=c++17 -Wall -Wextra -I/mnt/juxtapose-c++/eigen-3.3.9 -I/mnt/juxtapose-c++/bytetrack-cpp/include -I/mnt/juxtapose-c++ -I/usr/include/opencv4
+CXX = /opt/gcc-ubuntu-9.3.0-2020.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-g++
+CXXFLAGS = -std=c++17 -Wall -Wextra -I/mnt/dependency -I/mnt/juxtapose-c++/eigen-3.3.9 -I/mnt/juxtapose-c++/bytetrack-cpp/include -I/mnt/juxtapose-c++ -I/usr/include/opencv4
 LDFLAGS =
 
 # 目标文件目录

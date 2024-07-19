@@ -12,11 +12,11 @@ extern "C"{
 
 typedef struct stream_t{
     struct sockaddr_in *server_info;
-    void *camera_buf;
+    frame_buf_t *camera_buf;
     size_t frame_size; // default shoud be 640*480*3;
 }stream_t;
 
-stream_t *stream_init(struct sockaddr_in *server_info, frame_t *camera_buf, size_t frame_size);
+stream_t *stream_init(struct sockaddr_in *server_info, frame_buf_t *camera_buf,size_t frame_size);
 
 /** 
  * @brief Start the stream module

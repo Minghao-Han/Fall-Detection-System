@@ -1,9 +1,77 @@
 #include "rtmpose.hpp"
 #include <iostream>
 
-#include "rtmutils.cpp"
+// #include "rtmutils.cpp"
 #define SIZE_OF_INT 4
 #define SIZE_OF_FLOAT 4
+
+
+const std::vector<float> IMAGE_MEAN{ 123.675, 116.28, 103.53 };
+const std::vector<float> IMAGE_STD{ 58.395, 57.12, 57.375 };
+
+const int32_t RTMPose::SIMCC_LEN[2] = {128, 256}; // 定义并初始化静态常量数组
+
+cv::Mat GetAffineTransform(float center_x, float center_y, float scale_width, float scale_height, int output_image_width, int output_image_height, bool inverse=false)
+{
+	// solve the affine transformation matrix
+	/* 求解仿射变换矩阵 */
+
+	// get the three points corresponding to the source picture and the target picture
+	// 获取源图片与目标图片的对应的三个点
+	cv::Point2f src_point_1;
+	src_point_1.x = center_x;
+	src_point_1.y = center_y;
+
+	cv::Point2f src_point_2;
+	src_point_2.x = center_x;
+	src_point_2.y = center_y - scale_width * 0.5;
+
+	cv::Point2f src_point_3;
+	src_point_3.x = src_point_2.x - (src_point_1.y - src_point_2.y);
+	src_point_3.y = src_point_2.y + (src_point_1.x - src_point_2.x);
+
+
+	float alphapose_image_center_x = output_image_width / 2;
+	float alphapose_image_center_y = output_image_height / 2;
+
+	cv::Point2f dst_point_1;
+	dst_point_1.x = alphapose_image_center_x;
+	dst_point_1.y = alphapose_image_center_y;
+
+	cv::Point2f dst_point_2;
+	dst_point_2.x = alphapose_image_center_x;
+	dst_point_2.y = alphapose_image_center_y - output_image_width * 0.5;
+
+	cv::Point2f dst_point_3;
+	dst_point_3.x = dst_point_2.x - (dst_point_1.y - dst_point_2.y);
+	dst_point_3.y = dst_point_2.y + (dst_point_1.x - dst_point_2.x);
+
+
+	cv::Point2f srcPoints[3];
+	srcPoints[0] = src_point_1;
+	srcPoints[1] = src_point_2;
+	srcPoints[2] = src_point_3;
+
+	cv::Point2f dstPoints[3];
+	dstPoints[0] = dst_point_1;
+	dstPoints[1] = dst_point_2;
+	dstPoints[2] = dst_point_3;
+
+	// get affine matrix
+	// 获取仿射矩阵
+	cv::Mat affineTransform;
+	if (inverse)
+	{
+		affineTransform = cv::getAffineTransform(dstPoints, srcPoints);
+	}
+	else
+	{
+		affineTransform = cv::getAffineTransform(srcPoints, dstPoints);
+	}
+
+	return affineTransform;
+}
+
 
 
 RTMPose::RTMPose(const char* model_path) {
@@ -47,14 +115,14 @@ RTMPose::~RTMPose() {
     }
 }
 
-std::vector<std::vector<PosePoint>> RTMPose::get_kpts(const cv::Mat& input_mat, const vector<DetectBox>& boxs)
+std::vector<std::array<PosePoint,17>> RTMPose::get_kpts(const cv::Mat& input_mat, const vector<DetectBox>& boxs)
 {
-    std::vector<std::vector<PosePoint>> kpts;
+    std::vector<std::array<PosePoint,17>> pose_results;
 	for (auto& box : boxs){
-        std::vector<PosePoint> pose_result;
-
+        // std::vector<PosePoint> pose_result;
+        std::array<PosePoint,17> kpts;
         if (!box.IsValid())
-            kpts.push_back(pose_result);
+            pose_results.push_back(kpts);
 
         std::pair<cv::Mat, cv::Mat> crop_result_pair = CropImageByDetectBox(input_mat, box);
 
@@ -207,26 +275,26 @@ std::vector<std::vector<PosePoint>> RTMPose::get_kpts(const cv::Mat& input_mat, 
             temp_point.x = int(pose_x);
             temp_point.y = int(pose_y);
             temp_point.score = score;
-            pose_result.emplace_back(temp_point);
+            kpts[i]=temp_point;
         }
 
         // anti affine transformation to obtain the coordinates on the original picture
         // 反仿射变换获取在原始图片上的坐标
-        for (int i = 0; i < pose_result.size(); ++i)
+        for (int i = 0; i < kpts.size(); ++i)
         {
             cv::Mat origin_point_Mat = cv::Mat::ones(3, 1, CV_64FC1);
-            origin_point_Mat.at<double>(0, 0) = pose_result[i].x;
-            origin_point_Mat.at<double>(1, 0) = pose_result[i].y;
+            origin_point_Mat.at<double>(0, 0) = kpts[i].x;
+            origin_point_Mat.at<double>(1, 0) = kpts[i].y;
 
             cv::Mat temp_result_mat = affine_transform_reverse * origin_point_Mat;
 
-            pose_result[i].x = static_cast<float>(temp_result_mat.at<double>(0, 0));
-            pose_result[i].y = static_cast<float>(temp_result_mat.at<double>(1, 0));
+            kpts[i].x = static_cast<float>(temp_result_mat.at<double>(0, 0));
+            kpts[i].y = static_cast<float>(temp_result_mat.at<double>(1, 0));
         }
 
-        kpts.push_back(pose_result);
+        pose_results.push_back(kpts);
     }
-    return kpts;
+    return pose_results;
 }
 
 std::pair<cv::Mat, cv::Mat> RTMPose::CropImageByDetectBox(const cv::Mat& input_image, const DetectBox& box)
