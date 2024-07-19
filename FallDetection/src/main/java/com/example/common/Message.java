@@ -18,7 +18,7 @@ public class Message {
         templateCode = "SMS_154950909";//您的验证码${code}，该验证码5分钟内有效，请勿泄漏于他人！
     }
     public static void main(String[] args) throws Exception {
-        sendMessage((int)(Math.random()*1000000)+"", "13657408690");
+        sendMessage((int)(Math.random()*1000000)+"", "15527685070");
     }
     public static void sendMessage(String codeValue, String phoneNumber) {
         // 设置超时时间-可自行调整

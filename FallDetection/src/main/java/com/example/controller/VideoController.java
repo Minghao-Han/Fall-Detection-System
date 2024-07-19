@@ -25,6 +25,7 @@ public class VideoController {
     @Value("${video.upload.directory}")
     private String uploadDir;
     // 用于接收上传的视频流，并进行处理
+    public String serialNumber="";//展示时输入
     @PostMapping("/upload")
     public ResponseEntity<String> uploadVideo(@RequestParam("file") MultipartFile file) {
         try {
@@ -35,7 +36,7 @@ public class VideoController {
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadFile));
                 stream.write(bytes);
                 stream.close();
-                /*fallVideoService.addData(serialNumber,uploadFile.getName())*/;//里面应该有相关参数，只包括序列号似乎即可
+                fallVideoService.addData(serialNumber,uploadFile.getName());//*;//里面应该有相关参数，只包括序列号似乎即可
                 //短信发送接口的调用
                 /*Message.sendMessage((int)(Math.random()*1000000)+"", "13657408690");*/
                 videoProcessingService.transcodeVideo(uploadFile);

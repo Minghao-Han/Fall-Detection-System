@@ -4,6 +4,7 @@
       <el-table :data="tableData" stripe style="width: 100%">
         <!--这里的prop的名字应该与entity中设定的变量名相同        -->
         <el-table-column prop="videoName" label="视频名称"></el-table-column>
+        <el-table-column prop="dateTime" label="日期"></el-table-column>
         <el-table-column label="操作" >
           <template slot-scope="scope">
             <el-button type="primary" @click="play(scope.row.videoName)">播放</el-button>
