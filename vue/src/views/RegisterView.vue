@@ -22,7 +22,11 @@
                 <el-button round style="width: 80%; height: 40px" type="primary" @click="register()">注册</el-button>
               </el-form-item>
               <el-form-item>
+<<<<<<< HEAD
                 <el-button round style="width: 80%; height: 40px" type="primary" @click="goLogin()">返回登录界面</el-button>
+=======
+                <el-button round style="width: 80%; height: 40px" type="primary">返回登录界面</el-button>
+>>>>>>> 07b5ca7a7ef17d8f083510ae937a511276b1b83e
               </el-form-item>
             </el-form>
           </div>
