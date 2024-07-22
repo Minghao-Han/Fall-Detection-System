@@ -1,10 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import LayoutView from "@/views/Layout.vue";
-import RegisterView from "@/views/RegisterView.vue"
-import CameraStream from "@/views/CameraStream.vue";
 
 Vue.use(VueRouter)
 
@@ -12,32 +7,28 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginView
+    // component: LoginView
+    component: () => import('../views/LoginView.vue')
   },
   {
     path: '/register',
     name: 'Register',
-    component: RegisterView
+    component: () => import('../views/RegisterView.vue')
   },
   {
     path: '/',
     name: 'Layout',
-    component: LayoutView,
+    component: () => import('../views/Layout.vue'),
     children:[
       {
         path: '',
         name: 'home',
-        component: HomeView
+        component: () => import('../views/HomeView.vue')
       },
       {
         path: 'camera',
         name: 'camera',
         component: () => import(/* webpackChunkName: "about" */ '../views/CameraView.vue')
-      },
-      {
-        path: 'stream',
-        name: 'stream',
-        component: () => import('../views/CameraStream.vue')
       },
       {
         path: 'fallVideo',

@@ -43,19 +43,19 @@ import request from "@/utils/request";
 export default {
   data() {
     return {
-      user: localStorage.getItem("user")?JSON.parse(localStorage.getItem("user")):{},
-      params:{
-        videoName:'',
-        pageNum:1,
-        pageSize:5,
-        phone:'',
+      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {},
+      params: {
+        videoName: '',
+        pageNum: 1,
+        pageSize: 5,
+        phone: '',
       },
       tableData: [],
-      total:0,
-      dialogVisible:false,
+      total: 0,
+      dialogVisible: false,
       playerOptions: {
         height: '480',
-        width:'640',
+        width: '640',
         autoplay: true,
         muted: false,
         language: 'en',
@@ -63,8 +63,7 @@ export default {
         sources: [{
           type: "video/mp4",
           // mp4
-          src: "http://localhost:8080/videos/cam1.mp4",
-          // webm
+          src: ""
           // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
         }],
         poster: "https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg",
@@ -74,43 +73,33 @@ export default {
   },
   //页面加载的时候做的事情，在created里面
   created() {
-    this.params.phone=this.user.phone;
+    this.params.phone = this.user.phone;
     this.findBySearch();
   },
   //定义一些界面上控件出发的事件并调用方法
-  methods:{
-    findBySearch(){
-      request.get("/fallVideo/search", {
+  methods: {
+    findBySearch() {
+      request.get("/video/search", {
         params: this.params
-      }).then(res =>{
-        if(res.code === '0'){
+      }).then(res => {
+        if (res.code === '0') {
           this.tableData = res.data.list;
-          this.total=res.data.total;
-        }else {
+          this.total = res.data.total;
+        } else {
 
         }
       })
     },
-    handleSizeChange(pageSize){
+    handleSizeChange(pageSize) {
       this.params.pageSize = pageSize;
       this.findBySearch();
     },
-    handleCurrentChange(pageNum){
+    handleCurrentChange(pageNum) {
       this.params.pageNum = pageNum;
       this.findBySearch();
     },
-    play(videoName){
+    play(videoName) {
       this.dialogVisible = true;
-      request.get("/video/fallClips/"+ videoName+".mp4", {
-        responseType: "blob"
-      })
-          .then(res =>{
-            const videoBlob = new Blob([res], {type: 'video/mp4'});
-            this.playerOptions.sources[0].src = URL.createObjectURL(videoBlob);
-          })
-          .catch(error =>{
-            console.error('Error fetching video', error);
-          });
     }
   }
 }

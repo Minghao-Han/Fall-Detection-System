@@ -10,6 +10,7 @@ import java.util.Date;
 public class FallVideo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "videoId")
     private Integer videoId;
 
     @Column(name = "phone")
