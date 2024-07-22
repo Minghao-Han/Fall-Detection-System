@@ -62,8 +62,7 @@ export default {
         sources: [{
           type: "video/mp4",
           // mp4
-          src: "http://localhost:8080/videos/cam1.mp4",
-          // webm
+          src: ""
           // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
         }],
         poster: "https://surmon-china.github.io/vue-quill-editor/static/images/surmon-1.jpg",
@@ -79,7 +78,7 @@ export default {
   //定义一些界面上控件出发的事件并调用方法
   methods:{
     findBySearch(){
-      request.get("/fallVideo/search", {
+      request.get("/video/search", {
         params: this.params
       }).then(res =>{
         if(res.code === '0'){
@@ -100,7 +99,7 @@ export default {
     },
     play(videoName){
       this.dialogVisible = true;
-      request.get("/video/fallClips/${videoName}"+".mp4", {
+      request.get("/video/fallClips/"+videoName+".mp4", {
         responseType: "blob"
       })
           .then(res =>{

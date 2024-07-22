@@ -2,11 +2,7 @@ package com.example.controller;
 
 import com.example.exception.CustomException;
 import com.example.service.CameraService;
-import com.example.service.FrameProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +14,6 @@ import com.example.entity.Params;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,9 +26,6 @@ import java.util.List;
 public class CameraController {
     @javax.annotation.Resource
     private CameraService cameraService;
-
-    @Autowired
-    private FrameProcessor frameProcessor;
 
     @Value("${camera.stream.directory}")
     private String framePath;
@@ -83,20 +75,6 @@ public class CameraController {
         cameraService.unbindPhone(serialNumber);
         return Result.success();
     }
-
-    @Autowired
-    public CameraController(CameraService cameraService) {
-        this.cameraService = cameraService;
-    }
-
-    @PostMapping("/receiveFrame")
-    public void receiveFrame(@RequestBody byte[] frameData) {
-        if(frameProcessor.getStatus() != true){
-            frameProcessor.init();
-        }
-        frameProcessor.receiveFrame(frameData);
-    }
-
 
     @GetMapping(value = "/stream", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> pushStream() throws IOException {

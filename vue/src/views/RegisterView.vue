@@ -1,5 +1,5 @@
 <template>
-  <div class="full-screen-background"style="width: content-box;height: content-box;background-image: url('/background.png')">
+  <div class="full-screen-background" style="width: content-box;height: content-box;background-image: url('/background.png')">
     <el-container>
       <div style="width: 900px; height: 450px; margin: 200px auto;
           background-color:rgba(252,252,252,1); border-radius: 10px;display: flex;">
@@ -22,6 +22,7 @@
                 <el-button round style="width: 80%; height: 40px" type="primary" @click="register()">注册</el-button>
               </el-form-item>
               <el-form-item>
+                <el-button round style="width: 80%; height: 40px" type="primary" @click="goLogin()">返回登录界面</el-button>
                 <el-button round style="width: 80%; height: 40px" type="primary">返回登录界面</el-button>
               </el-form-item>
             </el-form>
@@ -77,7 +78,7 @@ export default {
       })
     },
     goLogin(){
-      this.$router.push("login");
+      this.$router.push("/login");
     }
   }
 }
