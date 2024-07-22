@@ -20,11 +20,27 @@
       >
         播放
       </el-button>
-      <div style="position: relative; width: 100%; height: 100vh;">
-        <el-image :src="imageUrl" alt="Image"
-             v-if="selectedCamera != null"
-             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -75%);
-             width: 640px; height: 480px"></el-image>
+<!--      <div style="position: relative; width: 100%; height: 100vh;">-->
+<!--        <el-image :src="imageUrl" alt="Image"-->
+<!--             v-if="selectedCamera != null"-->
+<!--             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -75%);-->
+<!--             width: 640px; height: 480px"></el-image>-->
+<!--      </div>-->
+      <div>
+        <h1>一、安装播放器</h1>
+        <ol>
+          <li>点击右侧<a href="https://potplayer.org/" target="_blank">PotPlayer播放器</a></li>
+          <li>在网站上找到并下载最新版本的播放器。</li>
+          <li>解压下载下来的压缩包</li>
+          <li>运行其中的安装.bat</li>
+        </ol>
+        <h1>二、使用播放器查看摄像头画面</h1>
+        <ol>
+          <li>打开PotPlayer。</li>
+          <li>点击添加->添加链接</li>
+          <li>将 rtmp://192.168.43.133:1935/live/streamkey 粘贴到输入框中，点击确定。</li>
+          <li>双击播放器右方出现的源，开始查看摄像头画面</li>
+        </ol>
       </div>
 
       <el-drawer

@@ -31,11 +31,6 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../views/CameraView.vue')
       },
       {
-        path: 'stream',
-        name: 'stream',
-        component: () => import('../views/CameraStream.vue')
-      },
-      {
         path: 'fallVideo',
         name: 'fallVideo',
         component: () => import(/* webpackChunkName: "about" */ '../views/FallVideoView.vue')
