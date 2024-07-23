@@ -14,6 +14,7 @@ int clip_saver_init(clip_saver_t *clip_saver, int capacity, char *folder_path,fr
     }
     DIR *dir = opendir(folder_path);
     if (dir == NULL) {
+        printf("what can i say\n");
         perror("Failed to open the folder\n");
         return 1;
     }
@@ -70,12 +71,12 @@ int save_clip(clip_saver_t *clip_saver){
     if (clip_end<clip_start) // bf|******e------s******|be
     {
         int16_t *current=&(clip_saver->frame_buf->writer_head);
-        printf("from %d buf_end and from buf_start to %d\n",clip_start,clip_end);
+        // printf("from %d buf_end and from buf_start to %d\n",clip_start,clip_end);
         while ((*current<=clip_end)||(*current>=clip_start)); //现在摄像头读写的buf会是正在保存的，会对正在保存的clip造成影响，while循环等待
         fwrite(buf_start+clip_start*frame_size, frame_size, length-clip_start, new_file);
         fwrite(buf_start, frame_size, clip_end, new_file);
     }else{// bf|------s*******e------|be
-        printf("from %d to %d\n",clip_start,clip_end);
+        // printf("from %d to %d\n",clip_start,clip_end);
         int16_t *current=&(clip_saver->frame_buf->writer_head);
         while ((*current<=clip_end)&&(*current>=clip_start));//现在摄像头读写的buf是正在保存的，会对正在保存的clip造成影响，while循环等待
         fwrite(buf_start+clip_start*frame_size, frame_size, clip_length, new_file);

@@ -6,8 +6,9 @@ CXXFLAGS = -g -I/mnt/dependency/opencv/include -I/mnt/dependency/include -I$(SRC
 -I/mnt/dependency -I/mnt/git_repo/embedded_system/detection_module \
 -I/root/.horizon/ddk/xj3_aarch64/dnn/include \
 -I/mnt/dependency/include/xtensor/include \
--I/mnt/dependency/include/xtl/include
-LDFLAGS = -Wl,-rpath-link,/usr/lib/board/lib \
+-I/mnt/dependency/include/xtl/include \
+-I/mnt/dependency/include/vio
+LDFLAGS = -Wl,-rpath-link,/open_explorer/lib \
         -lpthread \
         -Wl,-rpath-link,/opt/gcc-ubuntu-9.3.0-2020.03-x86_64-aarch64-linux-gnu/aarch64-linux-gnu/lib \
         -L/usr/lib/board/lib -lspcdev -lm \
@@ -22,20 +23,20 @@ LDFLAGS = -Wl,-rpath-link,/usr/lib/board/lib \
 PKG_CFLAGS = $(shell pkg-config --cflags opencv)
 PKG_LDFLAGS = $(shell pkg-config --libs opencv)
 
-STATIC_LIBS = /mnt/git_repo/embedded_system/detection_module/bytetrack-cpp/libbytetrack.a
+# STATIC_LIBS = /mnt/git_repo/embedded_system/detection_module/bytetrack-cpp/libbytetrack.a
 
 # 定义源文件和目标文件
 SRC_FOLDER = /mnt/git_repo/embedded_system
-OBJS = clip.o conf.o frame.o main.o detection.o camera.o alert.o video_upload.o lstm.o rtmpose.o fcos.o video_trans.o detecresult.o
+OBJS = clip.o conf.o frame.o main.o detection.o camera.o alert.o video_upload.o video_trans.o 
 # 生成的可执行文件
-TARGET = sys_test
+TARGET = no_fall
 
 # 规则：默认目标
 all: $(TARGET)
 
 # 规则：生成可执行文件
 $(TARGET): $(OBJS)
-	$(CXX) -o $@ $^ $(STATIC_LIBS) $(LDFLAGS) $(PKG_LDFLAGS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(PKG_LDFLAGS)
 
 # 规则：编译所有OBJS
 frame.o: $(SRC_FOLDER)/utils/frame.c
@@ -62,21 +63,9 @@ alert.o: $(SRC_FOLDER)/transmit_module/alert.cpp
 video_upload.o: $(SRC_FOLDER)/transmit_module/video_upload.cpp
 	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
 
-lstm.o : $(SRC_FOLDER)/detection_module/lstm/lstm.cpp
-	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
-
-
-rtmpose.o: $(SRC_FOLDER)/detection_module/rtmpose/rtmpose.cpp
-	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
-
-fcos.o: $(SRC_FOLDER)/detection_module/fcos/fcos.cpp
-	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
-
 video_trans.o : $(SRC_FOLDER)/transmit_module/video_trans.c
 	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
 
-detecresult.o : $(SRC_FOLDER)/detection_module/DetecResult.cpp
-	$(CXX) $(CXXFLAGS) $(PKG_CFLAGS) -c $< -o $@
 # 规则：清理生成的文件
 clean:
 	rm -f $(OBJS) $(TARGET)

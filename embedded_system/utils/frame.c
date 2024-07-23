@@ -50,11 +50,11 @@ void frame_buf_destroy(frame_buf_t *frame_buf){
 void frame_buf_pop(frame_buf_t *frame_buf, frame_t *frame)
 {
     // under the assumption that the the speed of camera reading is faster than that of the detection module, these buf_locks avoid duplicate detection of a same frame and meanwhile avoid reading and writing at the same time.
-    // 在假设相机读取速度快于检测模块的情况下，这些buf_locks避免了对同一帧的重复检测，同时避免了读写冲突。
+    // deprecated 在假设相机读取速度快于检测模块的情况下，这些buf_locks避免了对同一帧的重复检测，同时避免了读写冲突。
     int16_t read_head = (frame_buf->writer_head - 1 + frame_buf->length) % frame_buf->length;
-    while (pthread_mutex_trylock(&(frame_buf->buf_locks[read_head])))
-    {
-        read_head = (frame_buf->writer_head - 1 + frame_buf->length) % frame_buf->length;
-    }
+    // while (pthread_mutex_trylock(&(frame_buf->buf_locks[read_head])))
+    // {
+    //      read_head = (frame_buf->writer_head - 1 + frame_buf->length) % frame_buf->length;
+    // }
     memcpy(frame, frame_buf->frames + read_head * frame_buf->frame_size, frame_buf->frame_size);
 }

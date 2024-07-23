@@ -5,11 +5,11 @@
 #include "video_trans.hpp"
 
 static const char *FOLDER_PATH = "/home/sunrise/clip";
-static const char *TOKEN="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTUyNzY4NTA3MCIsImV4cCI6MTcyMTExMjcwNn0.yliAQoQkqNf02LPTL31yRpt2I8dcPNi8IgjTchYIEkI";
-static long CONNECT_TIMEOUT=10L;
-static long TRANS_TIMEOUT=20L;
+static const char *TOKEN="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxNTUyNzY4NTA3MCIsImV4cCI6MTcyMTk4Mzk1N30.LvmMx1zND2C9_0v-5CSOzkTt8Tz_ZUcwhwbflvuOlYk";
+static long CONNECT_TIMEOUT=100L;
+static long TRANS_TIMEOUT=100L;
 
-#define UPLOAD_URL "http://10.128.149.159:8080/api/video/upload"
+#define UPLOAD_URL "http://192.168.43.133:8080/api/video/upload"
 
 void *upload_file(void *args) {
     const int clip_id = (int)((long)args);
@@ -36,7 +36,7 @@ void *upload_file(void *args) {
                      CURLFORM_FILE, filePath,
                      CURLFORM_END);
 
-        // 设置curl选项
+        // 
         curl_easy_setopt(curl, CURLOPT_URL, UPLOAD_URL);
         curl_easy_setopt(curl, CURLOPT_HTTPPOST, formpost);
         // 设置连接超时为10秒

@@ -108,5 +108,6 @@ void camera_destroy(camera_t *camera){
     sem_wait(&camera_exited);
     sp_vio_close(camera->vio_camera_ptr);
     sp_release_vio_module(camera->vio_camera_ptr);
+    printf("camera destroy before\n");
     free(camera);
 }

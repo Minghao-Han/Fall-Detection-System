@@ -22,6 +22,7 @@
 #define VIDEO_STREAM 2
 #define ALERT_THREAD 3 
 #define SEND_CLIP_THREAD 4
+#define SERVER_PORT 7777
 
 #define DEFAULT_CONF_PATH "./conf.txt"
 
@@ -49,11 +50,8 @@ void clean_up(camera_t *camera,fall_detector_t *fall_detector,frame_buf_t *frame
     if(frame_buf){
         printf("cleaning up clip ");
         frame_buf_destroy(frame_buf);
-        printf(" done\n");
+        printf("done\n");
     }
-    // free stream
-    // if(stream)stream_destroy(stream);
-    // free camera
     if(camera){
         printf("cleaning up camera ");
         camera_destroy(camera);
@@ -90,7 +88,7 @@ int main(){
     camera->camera_buf=frame_buf;
     pthread_create(&threads[CAMERA_THREAD], NULL, &camera_start, (void *)camera);
     printf("wait %d seconds for camera to fullfill the whole buf\n",frame_len_seconds);
-    sleep(frame_len_seconds); //wait 7 seconds so that camera can fullfill the whole buf
+    // sleep(frame_len_seconds); //wait 7 seconds so that camera can fullfill the whole buf
     printf("continue initializing\n");
     // video stream transmission init and start
     struct sockaddr_in server_info;//定义sockaddr_in结构体mysock
@@ -106,14 +104,7 @@ int main(){
     // 假设 config.server_port 是一个包含端口号的字符串
     printf("server ip:%s\n",config.server_ip);
     printf("server port:%d\n",config.server_port);
-    server_info.sin_port = htons(config.server_port);  // 设置端口
-    // 将 IP 地址从字符串转换为网络字节序，并设置到结构体中
-    if (inet_pton(AF_INET, config.server_ip, &server_info.sin_addr) <= 0) {
-        perror("inet_pton error");
-        exit(EXIT_FAILURE);
-    }
-    stream_t *stream = stream_init(&server_info, frame_buf,frame_size);
-    pthread_create(&threads[VIDEO_STREAM], NULL, &stream_start, (void *)stream);
+    server_info.sin_port = htons(SERVER_PORT);  // 设置端口
 
     // init clip and its saver 
     int clip_length = 5;    // 5 seconds per clip
@@ -129,9 +120,9 @@ int main(){
     // fall detection init and start
     // init sem for fall detection, set initial value to 0
     sem_init(&fall_sem, 0, 0);
-    fall_detector_t *fall_detector=NULL;
-    // fall_detector_t *fall_detector = fall_detector_init(&fall_sem, frame_buf);
-    // pthread_create(&threads[FALL_DETECTION_THREAD], NULL, &fall_detector_start, (void *)fall_detector);
+    //fall_detector_t *fall_detector=NULL;
+    fall_detector_t *fall_detector = fall_detector_init(&fall_sem, frame_buf);
+    pthread_create(&threads[FALL_DETECTION_THREAD], NULL, &fall_detector_start, (void *)fall_detector);
     
     upload_init(-1,-1,NULL,NULL);
 
@@ -148,7 +139,7 @@ int main(){
         // send_alert(TOKEN_TEMP);
         int file_idx=save_clip(&clip_saver);
         printf("fell. clip saved with index %d\n",file_idx);
-
+        // printf("fell. clip saved with index \n");
         // send the clip to the server in a new thread in order to not slow down the main thread ｜ 为了不拖慢主线程，将剪辑发送到服务器的操作放在一个新线程中
         // convert file_idx to void * type so that it can be passed to the thread function ｜ 将 file_idx 转换为 void * 类型，以便将其传递给线程函数
         pthread_create(threads+SEND_CLIP_THREAD, NULL, &upload_file, (void *)(long)file_idx); 

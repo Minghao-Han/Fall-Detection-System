@@ -7,5 +7,5 @@ $SRC_FOLDER/conf.txt \
 $SRC_FOLDER/transmit_module/*.cpp \
 $SRC_FOLDER/transmit_module/*.cpp"
 
-EXE_FILE="./sys_test"
-scp $SRC_FILES $EXE_FILE sunrise@192.168.142.187:~/sys_test
+EXE_FILE="./no_fall"
+scp $SRC_FILES $EXE_FILE sunrise@rdkx3:~/sys_test
