@@ -3,7 +3,7 @@
     <el-container>
       <el-header style="background-color: #687179">
         <img src="@/assets/logo.png" alt="" style="width: 40px; position: relative; top: 10px;">
-        <span style="font-size: 20px; margin-left: 15px; color: white">家庭摔倒检测</span>
+        <span style="font-size: 20px; margin-left: 15px; color: white">独居老人摔倒监测系统</span>
         <el-dropdown style="float:right; line-height: 60px; height: 60px">
           <span class="el-dropdown-link" style="color: white;font-size: 16px">{{user.name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
           <el-dropdown-menu slot="dropdown">

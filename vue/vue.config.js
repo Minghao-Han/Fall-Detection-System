@@ -6,7 +6,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // 后端服务的地址
+        target: 'http://192.168.43.133:8080', // 后端服务的地址
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

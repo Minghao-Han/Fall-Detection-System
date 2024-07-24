@@ -18,6 +18,10 @@ public interface FallVideoDao extends Mapper<FallVideo> {
     @Select("SELECT phone FROM camera WHERE serialNumber = #{serialNumber}")
     String getPhoneBySerialNumber(@Param("serialNumber") String serialNumber);
 
-    @Select("SELECT videoId FROM video WHERE serialNumber = #{serialNumber}")
-    int getVideoId(@Param("serialNumber") String serialNumber);
+    @Select("SELECT videoId FROM video WHERE videoName = #{videoName}")
+    int getVideoId(@Param("videoName") String videoName);
+
+    int getAffectedRows(@Param("fallVideo") FallVideo fallVideo);
+
+
 }
