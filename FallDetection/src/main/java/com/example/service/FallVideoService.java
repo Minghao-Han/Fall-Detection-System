@@ -8,7 +8,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
+import java.util.*;
+import java.time.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -60,11 +61,15 @@ public class FallVideoService {
         fallVideo.setSerialNumber(serialNumber);
         //插入记录并获取自增的ID
         fallVideo.setVideoName(fileName);
-        fallVideoDao.insertSelective(fallVideo);
-        // 根据 serialNumber 从 camera 表中查找 phone
-        int videoId=fallVideoDao.getVideoId(serialNumber);
-        String phone = fallVideoDao.getPhoneBySerialNumber(serialNumber);
-        fallVideo.setPhone(phone);
-        fallVideoDao.updateByPrimaryKey(fallVideo);
+        fallVideo.setDateTime(new Date());
+        int num = fallVideoDao.getAffectedRows(fallVideo);
+        if(num == 0) {
+            fallVideoDao.insertSelective(fallVideo);
+            // 根据 serialNumber 从 camera 表中查找 phone
+            int videoId = fallVideoDao.getVideoId(fileName);
+            String phone = fallVideoDao.getPhoneBySerialNumber(serialNumber);
+            fallVideo.setPhone(phone);
+            fallVideoDao.updateByPrimaryKey(fallVideo);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.common.Message;
 import com.example.common.Result;
 import com.example.entity.Camera;
 import com.example.entity.FallVideo;
@@ -15,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 @CrossOrigin
 @RestController
@@ -35,17 +33,20 @@ public class FallVideoController {
         try {
             // 保存上传的视频文件到服务器
             if (!file.isEmpty()) {
+                System.out.println("Request get!");
                 byte[] bytes = file.getBytes();
                 File uploadFile = new File(uploadDir + file.getOriginalFilename());
                 BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(uploadFile));
+                System.out.println("Start uploading!");
                 stream.write(bytes);
                 stream.close();
                 String videoName = uploadFile.getName();
                 int idx = videoName.lastIndexOf('.');
                 videoName = videoName.substring(0,idx);
+                System.out.println("Success!");
                 fallVideoService.addData("G7kL0mN2pZ8rT4uV",videoName);//里面应该有相关参数，只包括序列号似乎即可
                 //短信发送接口的调用
-//                Message.sendMessage((int)(Math.random()*1000000)+"", "13657408690");
+                Message.sendMessage((int)(Math.random()*1000000)+"", "13657408690");
                 fallVideoService.transcodeVideo(uploadFile);
                 return new ResponseEntity<>("Video uploaded successfully", HttpStatus.OK);
             } else {
