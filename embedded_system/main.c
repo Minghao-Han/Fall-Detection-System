@@ -88,7 +88,7 @@ int main(){
     camera->camera_buf=frame_buf;
     pthread_create(&threads[CAMERA_THREAD], NULL, &camera_start, (void *)camera);
     printf("wait %d seconds for camera to fullfill the whole buf\n",frame_len_seconds);
-    // sleep(frame_len_seconds); //wait 7 seconds so that camera can fullfill the whole buf
+    sleep(frame_len_seconds); //wait 7 seconds so that camera can fullfill the whole buf
     printf("continue initializing\n");
     // video stream transmission init and start
     struct sockaddr_in server_info;//定义sockaddr_in结构体mysock
@@ -105,7 +105,9 @@ int main(){
     printf("server ip:%s\n",config.server_ip);
     printf("server port:%d\n",config.server_port);
     server_info.sin_port = htons(SERVER_PORT);  // 设置端口
-
+    
+    stream_t *stream = stream_init(NULL, frame_buf,frame_size);
+    pthread_create(&threads[VIDEO_STREAM], NULL, &stream_start, (void *)stream);
     // init clip and its saver 
     int clip_length = 5;    // 5 seconds per clip
     
@@ -142,6 +144,7 @@ int main(){
         // printf("fell. clip saved with index \n");
         // send the clip to the server in a new thread in order to not slow down the main thread ｜ 为了不拖慢主线程，将剪辑发送到服务器的操作放在一个新线程中
         // convert file_idx to void * type so that it can be passed to the thread function ｜ 将 file_idx 转换为 void * 类型，以便将其传递给线程函数
+        // upload_file((void *)(long)file_idx);
         pthread_create(threads+SEND_CLIP_THREAD, NULL, &upload_file, (void *)(long)file_idx); 
         pthread_detach(threads[SEND_CLIP_THREAD]);
     }

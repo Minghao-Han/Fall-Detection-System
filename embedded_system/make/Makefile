@@ -29,7 +29,7 @@ PKG_LDFLAGS = $(shell pkg-config --libs opencv)
 SRC_FOLDER = /mnt/git_repo/embedded_system
 OBJS = clip.o conf.o frame.o main.o detection.o camera.o alert.o video_upload.o video_trans.o 
 # 生成的可执行文件
-TARGET = no_fall
+TARGET = 1no_fall
 
 # 规则：默认目标
 all: $(TARGET)

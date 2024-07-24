@@ -18,7 +18,7 @@
 static const char *MBFALL_MODEL_PATH = "/home/sunrise/models/mobilenetv3-fall.bin";
 static const int8_t THREAD_NUM_MAX = 5;
 static const size_t SIZE_OF_FLOAT = sizeof(float);
-static const float FALL_THRESHOLD = 0.85;
+static const float FALL_THRESHOLD = 0.2;
 static bool detect_continue = false;
 static void *vps;
 static int input_size;
@@ -42,7 +42,7 @@ fall_detector_t *fall_detector_init(sem_t *fall_sem, frame_buf_t *clip) {
     int output_width=224;
     int out_height=224;
     // set vps to scale only mode
-    int ret = sp_open_vps(vps, 1, 1, SP_VPS_SCALE, input_width, input_height, &output_width, &out_height, NULL, NULL, NULL, NULL, NULL);
+    int ret = sp_open_vps(vps, 4, 1, SP_VPS_SCALE, input_width, input_height, &output_width, &out_height, NULL, NULL, NULL, NULL, NULL);
     if (ret != 0)
     {
         printf("[Error] sp_open_vps failed!\n");
@@ -138,12 +138,12 @@ void *fall_detector_start(void *args) {
     int8_t fall_count = 0;
     int8_t skip_frame = 2;
     do {
-        // detection too fast, skip some frames
-        if (skip_frame)
-        {   
-            skip_frame>>1;
-            continue;
-        }
+        // // detection too fast, skip some frames
+        // if (skip_frame)
+        // {   
+        //     skip_frame>>1;
+        //     continue;
+        // }
         skip_frame=2;
         // 从 frame_buf 中取出一帧
         frame_buf_pop(frame_buf, frame);
@@ -198,7 +198,8 @@ void *fall_detector_start(void *args) {
         if (fall_count > 3) {
             sem_post(fall_sem);
             fall_count = 0;
-        }
+            sleep(5);
+        }else printf("no fall\n");
     } while (detect_continue);
 
     // 第八步释放资源

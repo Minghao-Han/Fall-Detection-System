@@ -54,7 +54,7 @@ camera_t *camera_init(sp_sensors_parameters *camera_params,int channel_num,frame
     void *camera_prt = sp_init_vio_module();
     camera->vio_camera_ptr = camera_prt;
     // open camera
-    int ret = sp_open_camera_v2(camera_prt, 0, -1, 1, camera_params,&yuv_width, &yuv_height);
+    int ret = sp_open_camera_v2(camera_prt, 3, -1, 1, camera_params,&yuv_width, &yuv_height);
     printf("wait for isp stability\n");
     sleep(2); // wait for isp stability
     printf("open camera ret:%d\n", ret);

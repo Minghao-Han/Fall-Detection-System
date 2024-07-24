@@ -1,0 +1,124 @@
+# 模型参数组
+model_parameters:
+
+  # 原始Onnx浮点模型文件
+  onnx_model: 'mblf-fall.onnx'
+
+  # 转换的目标处理器架构
+  march: 'bernoulli2'
+
+  # 模型转换输出的用于上板执行的模型文件的名称前缀
+  output_model_file_prefix: 'mobilenetv3-fall'
+
+  # 模型转换输出的结果的存放目录
+  working_dir: './pure-mb'
+
+  # 指定转换后混合异构模型是否保留输出各层的中间结果的能力
+  layer_out_dump: False
+
+  # # 指定模型的输出节点
+  # output_nodes: {OP_name}
+
+  # # 批量删除某一类型的节点
+  # remove_node_type: Dequantize
+
+  # # 删除指定名称的节点
+  # remove_node_name: {OP_name}
+
+# 输入信息参数组
+input_parameters:
+  # 原始浮点模型的输入节点名称
+  input_name: "input"
+
+  # 原始浮点模型的输入数据格式（数量/顺序与input_name一致）
+  input_type_train: 'rgb'
+
+  # 原始浮点模型的输入数据排布（数量/顺序与input_name一致）
+  input_layout_train: 'NCHW'
+
+  # 原始浮点模型的输入数据尺寸
+  input_shape: '1x3x224x224'
+
+  # # 网络实际执行时，输入给网络的batch_size, 默认值为1
+  # input_batch: 1
+
+  # # 在模型中添加的输入数据预处理方法
+  # norm_type: 'data_mean_and_scale;no_preprocess;no_preprocess'
+
+  # # 预处理方法的图像减去的均值, 如果是通道均值，value之间必须用空格分隔
+  # mean_value: '123.675 166.28 103.53;0 0 0 0;0 0 0 0'
+# 58.395 57.12 50.625
+  # # 预处理方法的图像缩放比例，如果是通道缩放比例，value之间必须用空格分隔
+  # scale_value: '0.0171 0.0175 0.0197;0 0 0 0;0 0 0 0'
+
+  # 转换后混合异构模型需要适配的输入数据格式（数量/顺序与input_name一致）
+  input_type_rt: 'nv12'
+
+  # 输入数据格式的特殊制式
+  # input_space_and_range: 'regular'
+
+  # 转换后混合异构模型需要适配的输入数据排布（数量/顺序与input_name一致），若input_type_rt配置为nv12，则此处参数不需要配置
+  # input_layout_rt: 'NCHW;NCHW;NCHW'
+
+# 校准参数组
+calibration_parameters:
+  # 模型校准使用的标定样本的存放目录
+  cal_data_dir: '/mnt/model_transform/calibration_data/input'
+
+  # 指定校准数据二进制文件的数据存储类型。
+  cal_data_type: 'float32'
+
+  # 开启图片校准样本自动处理（skimage read; resize到输入节点尺寸）
+  #preprocess_on: False
+
+  # 校准使用的算法类型
+  calibration_type: 'kl'
+
+  # max 校准方式的参数
+  max_percentile: 1.0
+
+  # # 强制指定OP在CPU上运行
+  # run_on_cpu:  {OP_name}
+
+  # # 强制指定OP在BPU上运行
+  # run_on_bpu:  {OP_name}
+
+  # # 指定是否针对每个channel进行校准
+  # per_channel: False
+
+  # 指定输出节点的数据精度
+  # optimization: set_model_output_int8
+
+# 编译参数组
+compiler_parameters:
+  # 编译策略选择
+  compile_mode: 'latency'
+
+  # 是否打开编译的debug信息
+  debug: False
+
+  # 模型运行核心数
+  core_num: 1
+
+  # 模型编译的优化等级选择
+  optimize_level: 'O3'
+
+  # # 指定名称为data的输入数据来源
+  # input_source: {"data": "pyramid"}
+
+  # # 指定模型的每个function call的最大可连续执行时间
+  # max_time_per_fc: 1000
+
+  # 指定编译模型时的进程数
+  jobs: 8
+
+# # 自定义算子参数组
+# custom_op:
+#   # 自定义op的校准方式
+#   custom_op_method: register
+
+#   # 自定义OP的实现文件, 该文件可由模板生成, 详情见自定义OP相关文档
+#   op_register_files: sample_custom.py
+
+#   # 自定义OP实现文件所在的文件夹, 请使用相对路径
+#   custom_op_dir: ./custom_op
