@@ -1,3 +1,4 @@
+#include "alert.h"
 #include <iostream>
 #include <curl/curl.h>
 
@@ -32,13 +33,13 @@ void send_alert(const char* token) {
     curl_global_cleanup(); // 清理 libcurl 资源
 }
 
-int main(int argc, char *argv[]) {
-    if(argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <token>" << std::endl;
-        return 1;
-    }
-    const char* token = argv[1];
-    send_alert(token);
-    return 0;
-}
+// int main(int argc, char *argv[]) {
+//     if(argc < 2) {
+//         std::cerr << "Usage: " << argv[0] << " <token>" << std::endl;
+//         return 1;
+//     }
+//     const char* token = argv[1];
+//     send_alert(token);
+//     return 0;
+// }
 

@@ -4,12 +4,11 @@
 #include "frame.h"
 
 typedef struct fall_detector_t {
-    frame_t *camera_buf;
     sem_t *fall_sem; //if fall than post a sem
-    frame_buf_t *clip; // store processed fall clip
+    frame_buf_t *frame_buf; // store processed fall clip
 } fall_detector_t;
 
-fall_detector_t *fall_detector_init(frame_t *camera_buf, sem_t *fall_sem,frame_buf_t *clip);
+fall_detector_t *fall_detector_init(sem_t *fall_sem,frame_buf_t *frame_buf);
 
 /**
  * @brief Start the fall detection module
