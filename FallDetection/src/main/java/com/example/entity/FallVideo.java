@@ -1,7 +1,10 @@
 package com.example.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "video")
 public class FallVideo {
@@ -18,6 +21,13 @@ public class FallVideo {
 
     @Column(name = "videoName")
     private String videoName;
+
+
+
+    @Column(name = "dateTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")
+    private Date dateTime;
 
     public Integer getVideoId() {
         return videoId;
@@ -49,5 +59,13 @@ public class FallVideo {
 
     public void setVideoName(String videoName) {
         this.videoName = videoName;
+    }
+
+    public Date getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 }

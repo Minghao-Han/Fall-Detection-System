@@ -3,7 +3,7 @@
     <el-container>
       <div style="width: 900px; height: 450px; margin: 200px auto;
           background-color:rgba(252,252,252,1); border-radius: 10px;display: flex;">
-        <h2 style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%);">独居老人检测系统</h2>
+        <h2 style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%);">独居老人摔倒监测系统</h2>
         <div style="width: 100%; height: 100%; text-align: center;flex: 1">
           <div style="width: 80%; margin: 70px auto; text-align: center;">
             <div style="display: inline-block;background-color: #7a7ab9; height: 3px; width: 80%; margin-bottom: 5px;"></div>
@@ -23,7 +23,6 @@
               </el-form-item>
               <el-form-item>
                 <el-button round style="width: 80%; height: 40px" type="primary" @click="goLogin()">返回登录界面</el-button>
-                <el-button round style="width: 80%; height: 40px" type="primary">返回登录界面</el-button>
               </el-form-item>
             </el-form>
           </div>

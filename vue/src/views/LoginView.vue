@@ -4,7 +4,7 @@
     <el-container>
           <div style="width: 900px; height: 450px; margin: 200px auto;
           background-color:rgba(252,252,252,1); border-radius: 10px;display: flex;">
-            <h2 style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%);">独居老人检测系统</h2>
+            <h2 style="position: absolute; top: 70px; left: 50%; transform: translateX(-50%);">独居老人摔倒监测系统</h2>
             <div style="flex: 1" class="el-container">
               <div class="background" :style="{ backgroundImage:'url(' + require('@/assets/old.gif') + ')' }">
               </div>
