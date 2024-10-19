@@ -74,9 +74,9 @@ Prepare your RDK X3 following the official instruction [D-Robotics-quickstart](h
    ./1no_fall
    ```
 
-## Contributing to <Project_Name>
+## Contributing to this program
 <!-- Optional if you don't have others contributing to your project -->
-To contribute to <Project_Name>, follow these steps:
+To contribute, follow these steps:
 
 1. Fork this repository.
 2. Create a branch: `git checkout -b <branch_name>`.
@@ -93,3 +93,6 @@ If you want to contact me you can reach me at `3508627758@qq.com`.
 ## License
 <!-- This is optional if you don't have a license -->
 This project uses the following license: MulanPSL-2.0 license.
+
+## Notice 
+some of the step might be incomplete.
